@@ -27,9 +27,9 @@
 	class="flex flex-col justify-center items-center w-20 h-14 rounded-xl border-4 border-yellow-400"
 >
 	<div class="font-semibold">
-		{highscore.username}
+		{highscore?.username}
 	</div>
 	<div class="font-extrabold">
-		{highscore.score}
+		{highscore?.score}
 	</div>
 </div>

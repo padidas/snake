@@ -11,21 +11,14 @@
 	import GameContainer from '../components/Layout/GameContainer.svelte'
 	import GameBoard from '../components/GameBoard.svelte'
 	import { browser } from '$app/env'
-
-	// types
-	type Square = [number, number]
-	type SnakeBody = Array<Square>
-	type Direction = 'up' | 'down' | 'left' | 'right'
-	type Highscore = {
-		username: string
-		score: number
-	}
-	type HeadRotation = '0deg' | '90deg' | '180deg' | '270deg'
+	import { getScores, saveScore } from '../firebase'
+	import { onMount } from 'svelte'
+	import type { Direction, HeadRotation, Square, Score } from '../model/Types'
 
 	// states
 	let squares: Array<Square> = []
 	let snakeHead: Square
-	let snakeBody: SnakeBody
+	let snakeBody: Square[]
 	let food: Square
 	let gameOver = false
 	let direction: Direction = 'right'
@@ -34,19 +27,16 @@
 	let growPos: Square
 	let score = 0
 	let username = browser ? window.localStorage.getItem('username') ?? '' : ''
-	let highscore: Highscore = {
-		username: browser ? window.localStorage.getItem('highscore.username') ?? '' : '',
-		score: browser ? +window.localStorage.getItem('highscore.score') ?? 0 : 0,
-	}
+	let highscore: Score
 	let nextBodyPartPos: Square
-	let snakeBodyWithoutFirst: SnakeBody
+	let snakeBodyWithoutFirst: Square[]
 	let lastSnakeBodyPart: Square
 	let headRotation: HeadRotation
 
 	// constants
 	const squaresMax = 14
 	const initialSnakeHead: Square = [4, 3]
-	const initialSnakeBody: SnakeBody = [[4, 2]]
+	const initialSnakeBody: Square[] = [[4, 2]]
 	// TODO: remove initial snakeBody
 	// -> nessessary to check if snakeBody is not empty in other code blocks
 
@@ -54,6 +44,15 @@
 	snakeBody = initialSnakeBody
 	nextBodyPartPos = snakeHead
 	food = [8, 6]
+
+	onMount(async () => {
+		getCurrentScores()
+	})
+
+	const getCurrentScores = async () => {
+		const res = await getScores()
+		highscore = await res
+	}
 
 	$: lastSnakeBodyPart = snakeBody[snakeBody.length - 1]
 
@@ -163,12 +162,12 @@
 	}
 
 	$: if (gameOver) {
-		if (score > highscore.score) {
-			highscore.score = score
-			highscore.username = username
-			localStorage.setItem('highscore.score', score.toString())
-			localStorage.setItem('highscore.username', username)
-		}
+		saveNewScore()
+	}
+
+	const saveNewScore = async () => {
+		await saveScore({ username, score })
+		getCurrentScores()
 	}
 
 	// snakeHead rotation

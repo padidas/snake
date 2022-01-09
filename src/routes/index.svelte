@@ -12,6 +12,7 @@
 	import GameBoard from '../components/GameBoard.svelte';
 	import { browser } from '$app/env';
 
+	// types
 	type Square = [number, number];
 	type SnakeBody = Array<Square>;
 	type Direction = 'up' | 'down' | 'left' | 'right';
@@ -21,6 +22,7 @@
 	};
 	type HeadRotation = '0deg' | '90deg' | '180deg' | '270deg';
 
+	// states
 	let squares: Array<Square> = [];
 	let snakeHead: Square;
 	let snakeBody: SnakeBody;
@@ -30,22 +32,24 @@
 	let growing: boolean = false;
 	let nowGrow: boolean = false;
 	let lastFoodPos: Square;
-	const squaresMax = 14;
 	let score = 0;
 	let username = browser ? window.localStorage.getItem('username') : '';
 	let highscore: Highscore = {
 		username: browser ? window.localStorage.getItem('highscore.username') : '',
 		score: browser ? +window.localStorage.getItem('highscore.score') : 0
 	};
-	const initialSnakeHead: Square = [4, 1];
-	const initialSnakeBody: SnakeBody = [[4, 2]];
-	let zwischenspeicher: Square;
+	let nextBodyPartPos: Square;
 	let snakeBodyWithoutFirst: SnakeBody;
 	let headRotation: HeadRotation;
 
+	// constants
+	const squaresMax = 14;
+	const initialSnakeHead: Square = [4, 3];
+	const initialSnakeBody: SnakeBody = [[4, 2]];
+
 	snakeHead = initialSnakeHead;
 	snakeBody = initialSnakeBody;
-	zwischenspeicher = snakeHead;
+	nextBodyPartPos = snakeHead;
 	food = [8, 6];
 
 	$: if (food[0] == snakeHead[0] && food[1] == snakeHead[1]) {
@@ -160,13 +164,13 @@
 		console.log('');
 	}
 
-	$: zwischenspeicher = snakeHead;
+	$: nextBodyPartPos = snakeHead;
 
 	// move snakeBody depending on snakeHead
 	$: snakeBody = snakeBody?.map((elem) => {
-		let tempSnakeHead = snakeHead;
-		let newPos = zwischenspeicher;
-		zwischenspeicher = elem;
+		snakeHead; // this line is only for reactivity
+		let newPos = nextBodyPartPos;
+		nextBodyPartPos = elem;
 		return newPos;
 	});
 
@@ -250,9 +254,9 @@
 			{#each squares as square}
 				<SquareContainer>
 					{#if snakeBody.some((box) => box[0] == square[0] && box[1] == square[1])}
-						<SnakeBody {growing} />
+						<SnakeBody />
 					{:else if snakeHead[0] == square[0] && snakeHead[1] == square[1]}
-						<SnakeHead {headRotation} {growing} />
+						<SnakeHead {headRotation} />
 					{:else if food[0] == square[0] && food[1] == square[1]}
 						<Apple />
 					{:else}

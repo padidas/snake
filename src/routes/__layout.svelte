@@ -1,7 +1,7 @@
 <script>
-	import '../app.css';
+	import '../app.css'
 </script>
 
-<div class="container mx-auto my-6 max-w-lg">
+<div class="container mx-auto my-3 max-w-lg">
 	<slot />
 </div>

@@ -1,7 +1,7 @@
 <script lang="ts">
-	type HeadRotation = '0deg' | '90deg' | '180deg' | '270deg';
+	type HeadRotation = '0deg' | '90deg' | '180deg' | '270deg'
 
-	export let headRotation: HeadRotation;
+	export let headRotation: HeadRotation
 </script>
 
 <div class="relative z-20" style="transform:rotate({headRotation})">

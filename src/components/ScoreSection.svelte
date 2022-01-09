@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { browser } from '$app/env';
+	import { browser } from '$app/env'
 
 	type Highscore = {
-		username: string;
-		score: number;
-	};
+		username: string
+		score: number
+	}
 
-	export let username: string;
-	export let score: number;
-	export let highscore: Highscore;
+	export let username: string
+	export let score: number
+	export let highscore: Highscore
 
-	$: if (browser) window.localStorage.setItem('username', username);
+	$: if (browser) window.localStorage.setItem('username', username)
 </script>
 
 <input

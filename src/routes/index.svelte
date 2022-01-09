@@ -48,17 +48,6 @@
 	zwischenspeicher = snakeHead;
 	food = [8, 6];
 
-	// collision detection (wall)
-	$: if (
-		snakeHead[0] >= squaresMax ||
-		snakeHead[0] < 0 ||
-		snakeHead[1] >= squaresMax ||
-		snakeHead[1] < 0
-	) {
-		console.log('COLLISION WITH WALL');
-		gameOver = true;
-	}
-
 	$: if (food[0] == snakeHead[0] && food[1] == snakeHead[1]) {
 		console.log('eating..');
 		score = score + 1;
@@ -109,21 +98,33 @@
 	};
 	initGameBoard();
 
-	const ms = 100;
-	let clear: any;
-
-	$: {
-		clearInterval(clear);
-		clear = setInterval(moveSnakeHead, ms);
-	}
-
 	$: snakeBodyWithoutFirst = snakeBody.filter((_, i) => i !== 0);
 
+	// collision detection (body)
 	$: if (
 		snakeBodyWithoutFirst.some((elem) => elem[0] === snakeHead[0] && elem[1] === snakeHead[1])
 	) {
 		console.log('COLLISION WITH SNAKE BODY');
 		gameOver = true;
+	}
+
+	// collision detection (wall)
+	$: if (
+		snakeHead[0] >= squaresMax ||
+		snakeHead[0] < 0 ||
+		snakeHead[1] >= squaresMax ||
+		snakeHead[1] < 0
+	) {
+		console.log('COLLISION WITH WALL');
+		gameOver = true;
+	}
+
+	// let snakeHead move in an interval
+	const ms = 100;
+	let clear: any;
+	$: {
+		clearInterval(clear);
+		clear = setInterval(moveSnakeHead, ms);
 	}
 
 	const moveSnakeHead = () => {
@@ -146,8 +147,22 @@
 		}
 	};
 
+	// logging
+	$: {
+		console.log('');
+		console.log('|´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´|');
+		console.log('snakeBody', snakeBody);
+		console.log('snakeHead', snakeHead);
+		console.log('direction', direction);
+		console.log('food', food);
+		console.log('lastFoodPos', lastFoodPos);
+		console.log('|..............................|');
+		console.log('');
+	}
+
 	$: zwischenspeicher = snakeHead;
 
+	// move snakeBody depending on snakeHead
 	$: snakeBody = snakeBody?.map((elem) => {
 		let tempSnakeHead = snakeHead;
 		let newPos = zwischenspeicher;

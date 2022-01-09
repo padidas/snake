@@ -30,60 +30,55 @@
 	let gameOver = false
 	let direction: Direction = 'right'
 	let growing: boolean = false
-	let nowGrow: boolean = false
 	let lastFoodPos: Square
+	let growPos: Square
 	let score = 0
-	let username = browser ? window.localStorage.getItem('username') : ''
+	let username = browser ? window.localStorage.getItem('username') ?? '' : ''
 	let highscore: Highscore = {
-		username: browser ? window.localStorage.getItem('highscore.username') : '',
-		score: browser ? +window.localStorage.getItem('highscore.score') : 0,
+		username: browser ? window.localStorage.getItem('highscore.username') ?? '' : '',
+		score: browser ? +window.localStorage.getItem('highscore.score') ?? 0 : 0,
 	}
 	let nextBodyPartPos: Square
 	let snakeBodyWithoutFirst: SnakeBody
+	let lastSnakeBodyPart: Square
 	let headRotation: HeadRotation
 
 	// constants
 	const squaresMax = 14
 	const initialSnakeHead: Square = [4, 3]
 	const initialSnakeBody: SnakeBody = [[4, 2]]
+	// TODO: remove initial snakeBody
+	// -> nessessary to check if snakeBody is not empty in other code blocks
 
 	snakeHead = initialSnakeHead
 	snakeBody = initialSnakeBody
 	nextBodyPartPos = snakeHead
 	food = [8, 6]
 
+	$: lastSnakeBodyPart = snakeBody[snakeBody.length - 1]
+
+	// eating
 	$: if (food[0] == snakeHead[0] && food[1] == snakeHead[1]) {
-		console.log('eating..')
 		score = score + 1
-		if (score > highscore.score) {
-			highscore.score = score
-			highscore.username = username
-			localStorage.setItem('highscore.score', score.toString())
-			localStorage.setItem('highscore.username', username)
-		}
+		growPos = food
 		resetFood()
 		growing = true
-		console.log('growing = true')
 	}
 
-	$: if (growing == true) {
-		let lastSnakeBodyPart = snakeBody[snakeBody.length - 1]
-		if (nowGrow == true) {
-			grow()
-			growing = false
-			console.log('growing = false')
-			nowGrow = false
-			console.log('nowGrow = false')
-		}
-		if (lastSnakeBodyPart[0] === lastFoodPos[0] && lastSnakeBodyPart[1] === lastFoodPos[1]) {
-			nowGrow = true
-			console.log('nowGrow = true')
+	// checking when to grow
+	$: {
+		if (growing == true) {
+			if (lastSnakeBodyPart[0] === growPos[0] && lastSnakeBodyPart[1] === growPos[1]) grow()
 		}
 	}
+
+	$: console.log('lastFoodPos', lastFoodPos)
+	$: console.log('food', food)
+	$: console.log('growPos', growPos)
 
 	const grow = () => {
-		snakeBody = [...snakeBody, lastFoodPos]
-		console.log('growing..')
+		snakeBody = [...snakeBody, growPos]
+		growing = false
 	}
 
 	const resetFood = () => {
@@ -149,19 +144,6 @@
 		}
 	}
 
-	// logging
-	$: {
-		console.log('')
-		console.log('|´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´|')
-		console.log('snakeBody', snakeBody)
-		console.log('snakeHead', snakeHead)
-		console.log('direction', direction)
-		console.log('food', food)
-		console.log('lastFoodPos', lastFoodPos)
-		console.log('|..............................|')
-		console.log('')
-	}
-
 	$: nextBodyPartPos = snakeHead
 
 	// move snakeBody depending on snakeHead
@@ -178,6 +160,15 @@
 		direction = 'right'
 		gameOver = false
 		score = 0
+	}
+
+	$: if (gameOver) {
+		if (score > highscore.score) {
+			highscore.score = score
+			highscore.username = username
+			localStorage.setItem('highscore.score', score.toString())
+			localStorage.setItem('highscore.username', username)
+		}
 	}
 
 	// snakeHead rotation
@@ -246,9 +237,6 @@
 			<ScoreSection {username} {score} {highscore} />
 		</div>
 		<GameBoard {gameOver}>
-			{#if gameOver}
-				<RestartButton {restart} />
-			{/if}
 			{#each squares as square}
 				<SquareContainer>
 					{#if snakeBody.some(box => box[0] == square[0] && box[1] == square[1])}
@@ -263,6 +251,14 @@
 				</SquareContainer>
 			{/each}
 		</GameBoard>
+		<div class="flex flex-1 w-full h-[50px] justify-around items-center">
+			<div>
+				Snake Length: {snakeBody.length}
+			</div>
+			<div>
+				<RestartButton {restart} />
+			</div>
+		</div>
 	</SubContainer>
 	<SubContainer>
 		<Controls {goDown} {goLeft} {goUp} {goRight} {rotateLeft} {rotateRight} />

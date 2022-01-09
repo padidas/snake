@@ -36,7 +36,7 @@
 	let username = browser ? window.localStorage.getItem('username') : ''
 	let highscore: Highscore = {
 		username: browser ? window.localStorage.getItem('highscore.username') : '',
-		score: browser ? +window.localStorage.getItem('highscore.score') : 0
+		score: browser ? +window.localStorage.getItem('highscore.score') : 0,
 	}
 	let nextBodyPartPos: Square
 	let snakeBodyWithoutFirst: SnakeBody
@@ -90,7 +90,7 @@
 		lastFoodPos = food
 		do {
 			food = [Math.floor(Math.random() * squaresMax), Math.floor(Math.random() * squaresMax)]
-		} while (snakeBody.some((elem) => elem[0] === food[0] && elem[1] === food[1]))
+		} while (snakeBody.some(elem => elem[0] === food[0] && elem[1] === food[1]))
 	}
 
 	const initGameBoard = () => {
@@ -105,13 +105,18 @@
 	$: snakeBodyWithoutFirst = snakeBody.filter((_, i) => i !== 0)
 
 	// collision detection (body)
-	$: if (snakeBodyWithoutFirst.some((elem) => elem[0] === snakeHead[0] && elem[1] === snakeHead[1])) {
+	$: if (snakeBodyWithoutFirst.some(elem => elem[0] === snakeHead[0] && elem[1] === snakeHead[1])) {
 		console.log('COLLISION WITH SNAKE BODY')
 		gameOver = true
 	}
 
 	// collision detection (wall)
-	$: if (snakeHead[0] >= squaresMax || snakeHead[0] < 0 || snakeHead[1] >= squaresMax || snakeHead[1] < 0) {
+	$: if (
+		snakeHead[0] >= squaresMax ||
+		snakeHead[0] < 0 ||
+		snakeHead[1] >= squaresMax ||
+		snakeHead[1] < 0
+	) {
 		console.log('COLLISION WITH WALL')
 		gameOver = true
 	}
@@ -160,7 +165,7 @@
 	$: nextBodyPartPos = snakeHead
 
 	// move snakeBody depending on snakeHead
-	$: snakeBody = snakeBody?.map((elem) => {
+	$: snakeBody = snakeBody?.map(elem => {
 		snakeHead // this line is only for reactivity
 		let newPos = nextBodyPartPos
 		nextBodyPartPos = elem
@@ -194,7 +199,7 @@
 	}
 
 	// controlls & key events
-	const handleKeydown = (e) => {
+	const handleKeydown = e => {
 		if (e.code === 'ArrowDown') e.preventDefault()
 		if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'KeyI') goUp()
 		else if (e.code === 'ArrowDown' || e.code === 'KeyS' || e.code === 'KeyK') goDown()
@@ -246,7 +251,7 @@
 			{/if}
 			{#each squares as square}
 				<SquareContainer>
-					{#if snakeBody.some((box) => box[0] == square[0] && box[1] == square[1])}
+					{#if snakeBody.some(box => box[0] == square[0] && box[1] == square[1])}
 						<SnakeBody />
 					{:else if snakeHead[0] == square[0] && snakeHead[1] == square[1]}
 						<SnakeHead {headRotation} />

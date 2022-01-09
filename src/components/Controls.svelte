@@ -23,25 +23,25 @@
 	<button
 		on:click={goUp}
 		class="flex flex-col items-center justify-center w-[100px] h-[100px] bg-blue-300 rounded-full font-extrabold"
-		>{'^'}</button
+		>{'⬆️'}</button
 	>
 </div>
 <div class="flex w-[320px] justify-around items-center -my-3">
 	<button
 		on:click={goLeft}
 		class="flex flex-col items-center justify-center w-[100px] h-[100px] bg-blue-300 rounded-full font-extrabold"
-		>{'<'}</button
+		>{'⬅️'}</button
 	>
 	<button
 		on:click={goRight}
 		class="flex flex-col items-center justify-center w-[100px] h-[100px] bg-blue-300 rounded-full font-extrabold"
-		>{'>'}</button
+		>{'➡️'}</button
 	>
 </div>
 <div class="flex w-[320px] justify-around items-center">
 	<button
 		on:click={goDown}
 		class="flex flex-col items-center justify-center w-[100px] h-[100px] bg-blue-300 rounded-full font-extrabold"
-		>{'v'}</button
+		>{'⬇️'}</button
 	>
 </div>

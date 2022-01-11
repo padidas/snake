@@ -15,6 +15,7 @@
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/adapter-static": "^1.0.0-next.24",
     "@sveltejs/kit": "next",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "autoprefixer": "^10.4.2",
@@ -33,6 +34,7 @@
   },
   "type": "module",
   "dependencies": {
-    "firebase": "^9.6.2"
+    "firebase": "^9.6.2",
+    "uuid": "^8.3.2"
   }
 }

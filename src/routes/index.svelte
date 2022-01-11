@@ -11,10 +11,13 @@
 	import GameContainer from '../components/Layout/GameContainer.svelte'
 	import GameBoard from '../components/GameBoard.svelte'
 	import { browser } from '$app/env'
-	import { getScores, saveScore } from '../firebase'
+	import { saveScore } from '../firebase'
 	import { onMount } from 'svelte'
 	import type { Direction, HeadRotation, Square, Score } from '../model/Types'
-
+	import ScoreBoard from '../components/ScoreBoard.svelte'
+	import { collection, query, orderBy, onSnapshot, doc, updateDoc, limit } from 'firebase/firestore'
+	import { db } from '../firebase'
+	import { v4 as uuid } from 'uuid'
 	// states
 	let squares: Array<Square> = []
 	let snakeHead: Square
@@ -27,6 +30,8 @@
 	let growPos: Square
 	let score = 0
 	let username = browser ? window.localStorage.getItem('username') ?? '' : ''
+	let scores: Score[] = []
+	let scoreId: string = uuid()
 	let highscore: Score
 	let nextBodyPartPos: Square
 	let snakeBodyWithoutFirst: Square[]
@@ -45,13 +50,28 @@
 	nextBodyPartPos = snakeHead
 	food = [8, 6]
 
+	export const getScores = (): void => {
+		const q = query(collection(db, 'scores'), orderBy('score', 'desc'), limit(10))
+		onSnapshot(q, querySnapshot => {
+			scores = querySnapshot.docs.map(doc => ({
+				username: doc.data().username,
+				score: doc.data().score,
+			}))
+		})
+	}
+
+	$: if (scores.length > 0)
+		highscore = scores.reduce((a, b) => {
+			if (a.score > b.score) return a
+			else return b
+		})
+
 	onMount(async () => {
 		getCurrentScores()
 	})
 
 	const getCurrentScores = async () => {
-		const res = await getScores()
-		highscore = await res
+		getScores()
 	}
 
 	$: lastSnakeBodyPart = snakeBody[snakeBody.length - 1]
@@ -62,6 +82,7 @@
 		growPos = food
 		resetFood()
 		growing = true
+		saveNewScore()
 	}
 
 	// checking when to grow
@@ -159,15 +180,11 @@
 		direction = 'right'
 		gameOver = false
 		score = 0
-	}
-
-	$: if (gameOver) {
-		saveNewScore()
+		scoreId = uuid()
 	}
 
 	const saveNewScore = async () => {
-		await saveScore({ username, score })
-		getCurrentScores()
+		await saveScore(scoreId, { username, score })
 	}
 
 	// snakeHead rotation
@@ -250,7 +267,7 @@
 				</SquareContainer>
 			{/each}
 		</GameBoard>
-		<div class="flex flex-1 w-full h-[50px] justify-around items-center">
+		<div class="flex flex-1 w-[344px] h-[50px] p-1 justify-between items-center">
 			<div>
 				Snake Length: {snakeBody.length}
 			</div>
@@ -260,7 +277,8 @@
 		</div>
 	</SubContainer>
 	<SubContainer>
-		<Controls {goDown} {goLeft} {goUp} {goRight} {rotateLeft} {rotateRight} />
+		<!-- <Controls {goDown} {goLeft} {goUp} {goRight} {rotateLeft} {rotateRight} /> -->
+		<ScoreBoard {scores} />
 	</SubContainer>
 </GameContainer>
 

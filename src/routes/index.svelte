@@ -18,6 +18,8 @@
 	import { collection, query, orderBy, onSnapshot, doc, updateDoc, limit } from 'firebase/firestore'
 	import { db } from '../firebase'
 	import { v4 as uuid } from 'uuid'
+	import { username } from '../stores'
+
 	// states
 	let squares: Array<Square> = []
 	let snakeHead: Square
@@ -29,7 +31,6 @@
 	let lastFoodPos: Square
 	let growPos: Square
 	let score = 0
-	let username = browser ? window.localStorage.getItem('username') ?? '' : ''
 	let scores: Score[] = []
 	let scoreId: string = uuid()
 	let highscore: Score
@@ -184,7 +185,7 @@
 	}
 
 	const saveNewScore = async () => {
-		await saveScore(scoreId, { username, score })
+		await saveScore(scoreId, { username: $username, score })
 	}
 
 	// snakeHead rotation
@@ -250,7 +251,7 @@
 <GameContainer>
 	<SubContainer>
 		<div class="flex w-[344px] justify-between items-center mb-2">
-			<ScoreSection {username} {score} {highscore} />
+			<ScoreSection {score} {highscore} />
 		</div>
 		<GameBoard {gameOver}>
 			{#each squares as square}

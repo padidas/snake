@@ -277,7 +277,7 @@
 		</GameBoard>
 		<div class="flex flex-1 w-[344px] h-[50px] p-1 justify-between items-center">
 			<div>
-				Snake Length: {snakeBody.length}
+				snake length: {snakeBody.length}
 			</div>
 			<div>
 				<RestartButton {restart} />

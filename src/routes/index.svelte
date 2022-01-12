@@ -257,9 +257,9 @@
 			{#each squares as square}
 				<SquareContainer>
 					{#if snakeBody.some(box => box[0] == square[0] && box[1] == square[1])}
-						<SnakeBody />
+						<SnakeBody {growing} />
 					{:else if snakeHead[0] == square[0] && snakeHead[1] == square[1]}
-						<SnakeHead {headRotation} />
+						<SnakeHead {headRotation} {growing} />
 					{:else if food[0] == square[0] && food[1] == square[1]}
 						<Apple />
 					{:else}

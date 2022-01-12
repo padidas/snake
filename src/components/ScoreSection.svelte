@@ -2,34 +2,19 @@
 	import { browser } from '$app/env'
 	import { username } from '../stores'
 
-	type Highscore = {
-		username: string
-		score: number
-	}
-
 	export let score: number
-	export let highscore: Highscore
 
 	$: if (browser) window.localStorage.setItem('username', $username)
 </script>
 
+<div>Es spielt</div>
 <input
-	class="bg-transparent h-14 border-4 text-center rounded-xl border-blue-300 w-[140px] font-extrabold text-lg"
-	placeholder="Dein Name..."
+	class="bg-transparent h-8 border-2 px-2 rounded bg-emerald-100 border-blue-300 w-[160px] font-bold text-gray-600 text-lg"
+	placeholder="Name..."
 	bind:value={$username}
 />
 <div
-	class="border-4 rounded-xl border-blue-300 w-20 h-14 flex justify-center items-center font-extrabold text-2xl"
+	class="bg-transparent h-8 border-2 text-center w-16 px-2 rounded bg-emerald-100 border-blue-300 font-bold text-gray-600 text-lg"
 >
 	{score}
-</div>
-<div
-	class="flex flex-col justify-center items-center w-20 h-14 rounded-xl border-4 border-yellow-400"
->
-	<div class="font-semibold">
-		{highscore?.username}
-	</div>
-	<div class="font-extrabold">
-		{highscore?.score}
-	</div>
 </div>

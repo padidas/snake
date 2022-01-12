@@ -32,7 +32,7 @@
 	let growPos: Square
 	let score = 0
 	let scores: Score[] = []
-	let scoreId: string = uuid()
+	let currentScoreId: string = uuid()
 	let highscore: Score
 	let nextBodyPartPos: Square
 	let snakeBodyWithoutFirst: Square[]
@@ -57,6 +57,8 @@
 			scores = querySnapshot.docs.map(doc => ({
 				username: doc.data().username,
 				score: doc.data().score,
+				scoreId: doc.id,
+				snakeLength: doc.data().snakeLength,
 			}))
 		})
 	}
@@ -181,11 +183,16 @@
 		direction = 'right'
 		gameOver = false
 		score = 0
-		scoreId = uuid()
+		currentScoreId = uuid()
 	}
 
 	const saveNewScore = async () => {
-		await saveScore(scoreId, { username: $username, score })
+		await saveScore(currentScoreId, {
+			username: $username,
+			score,
+			scoreId: currentScoreId,
+			snakeLength: snakeBody.length,
+		})
 	}
 
 	// snakeHead rotation
@@ -251,7 +258,7 @@
 <GameContainer>
 	<SubContainer>
 		<div class="flex w-[344px] justify-between items-center mb-2">
-			<ScoreSection {score} {highscore} />
+			<ScoreSection {score} />
 		</div>
 		<GameBoard {gameOver}>
 			{#each squares as square}
@@ -279,12 +286,12 @@
 	</SubContainer>
 	<SubContainer>
 		<!-- <Controls {goDown} {goLeft} {goUp} {goRight} {rotateLeft} {rotateRight} /> -->
-		<ScoreBoard {scores} />
+		<ScoreBoard {scores} {currentScoreId} />
 	</SubContainer>
 </GameContainer>
 
 <style global>
 	.growing {
-		background-color: darkgreen !important;
+		background-color: rgb(16, 100, 65) !important;
 	}
 </style>

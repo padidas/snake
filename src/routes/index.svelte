@@ -140,11 +140,11 @@
 	}
 
 	// let snakeHead move in an interval
-	const ms = 100
+	const snakeSpeedInMs = 80
 	let clear: any
 	$: {
 		clearInterval(clear)
-		clear = setInterval(moveSnakeHead, ms)
+		clear = setInterval(moveSnakeHead, snakeSpeedInMs)
 	}
 
 	const moveSnakeHead = () => {
@@ -275,7 +275,7 @@
 				</SquareContainer>
 			{/each}
 		</GameBoard>
-		<div class="flex flex-1 w-[344px] h-[50px] p-1 justify-between items-center">
+		<div class="flex flex-1 w-[344px] h-[50px] p-1 justify-between items-start">
 			<div>
 				snake length: {snakeBody.length}
 			</div>

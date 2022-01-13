@@ -1,7 +1,5 @@
 <script lang="ts">
-	import Apple from '../components/Apple.svelte'
-	import Controls from '../components/Controls.svelte'
-	import EmptySquare from '../components/EmptySquare.svelte'
+	import GameBoardTile from '../components/GameBoardTile.svelte'
 	import RestartButton from '../components/RestartButton.svelte'
 	import ScoreSection from '../components/ScoreSection.svelte'
 	import SnakeBody from '../components/SnakeBody.svelte'
@@ -10,11 +8,10 @@
 	import SubContainer from '../components/Layout/SubContainer.svelte'
 	import GameContainer from '../components/Layout/GameContainer.svelte'
 	import GameBoard from '../components/GameBoard.svelte'
-	import { browser } from '$app/env'
-	import { saveScore } from '../firebase'
+	import ScoreBoard from '../components/ScoreBoard.svelte'
 	import { onMount } from 'svelte'
 	import type { Direction, HeadRotation, Square, Score } from '../model/Types'
-	import ScoreBoard from '../components/ScoreBoard.svelte'
+	import { saveScore } from '../firebase'
 	import { collection, query, orderBy, onSnapshot, doc, updateDoc, limit } from 'firebase/firestore'
 	import { db } from '../firebase'
 	import { v4 as uuid } from 'uuid'
@@ -38,7 +35,10 @@
 	let snakeBodyWithoutFirst: Square[]
 	let lastSnakeBodyPart: Square
 	let headRotation: HeadRotation
-
+	let apple = '/assets/apple.svg'
+	let banana = '/assets/banana.svg'
+	let avocado = '/assets/avocado.svg'
+	let appleOrBanana = 0
 	// constants
 	const squaresMax = 14
 	const initialSnakeHead: Square = [4, 3]
@@ -106,6 +106,7 @@
 
 	const resetFood = () => {
 		lastFoodPos = food
+		appleOrBanana = Math.floor(Math.random() * 3)
 		do {
 			food = [Math.floor(Math.random() * squaresMax), Math.floor(Math.random() * squaresMax)]
 		} while (snakeBody.some(elem => elem[0] === food[0] && elem[1] === food[1]))
@@ -270,9 +271,17 @@
 					{:else if snakeHead[0] == square[0] && snakeHead[1] == square[1]}
 						<SnakeHead {headRotation} {growing} />
 					{:else if food[0] == square[0] && food[1] == square[1]}
-						<Apple />
+						<GameBoardTile>
+							{#if appleOrBanana === 0}
+								<img src={apple} alt="an apple" />
+							{:else if appleOrBanana === 1}
+								<img src={banana} alt="a banana" />
+							{:else}
+								<img src={avocado} alt="a banana" />
+							{/if}
+						</GameBoardTile>
 					{:else}
-						<EmptySquare />
+						<GameBoardTile />
 					{/if}
 				</SquareContainer>
 			{/each}

@@ -215,11 +215,13 @@
 
 	// controlls & key events
 	const handleKeydown = e => {
-		if (e.code === 'ArrowDown') e.preventDefault()
-		if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'KeyI') goUp()
-		else if (e.code === 'ArrowDown' || e.code === 'KeyS' || e.code === 'KeyK') goDown()
-		else if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'KeyJ') goLeft()
-		else if (e.code === 'ArrowRight' || e.code === 'KeyD' || e.code === 'KeyL') goRight()
+		const key = e.code
+		if (key === 'ArrowDown' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight')
+			e.preventDefault()
+		if (key === 'ArrowUp' || key === 'KeyW' || key === 'KeyI') goUp()
+		else if (key === 'ArrowDown' || key === 'KeyS' || key === 'KeyK') goDown()
+		else if (key === 'ArrowLeft' || key === 'KeyA' || key === 'KeyJ') goLeft()
+		else if (key === 'ArrowRight' || key === 'KeyD' || key === 'KeyL') goRight()
 	}
 
 	const goUp = () => {

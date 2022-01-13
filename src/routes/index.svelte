@@ -216,7 +216,7 @@
 	// controlls & key events
 	const handleKeydown = e => {
 		const key = e.code
-		if (key === 'ArrowDown' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight')
+		if (key === 'ArrowDown' || key === 'ArrowUp' || key === 'ArrowLeft' || key === 'ArrowRight')
 			e.preventDefault()
 		if (key === 'ArrowUp' || key === 'KeyW' || key === 'KeyI') goUp()
 		else if (key === 'ArrowDown' || key === 'KeyS' || key === 'KeyK') goDown()

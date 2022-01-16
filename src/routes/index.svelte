@@ -16,6 +16,7 @@
 	import { db } from '../firebase'
 	import { v4 as uuid } from 'uuid'
 	import { username } from '../stores'
+	import GameOverText from '../components/GameOverText.svelte'
 
 	// states
 	let squares: Array<Square> = []
@@ -35,6 +36,7 @@
 	let snakeBodyWithoutFirst: Square[]
 	let lastSnakeBodyPart: Square
 	let headRotation: HeadRotation
+	let gameOverKeydownCount = 0
 	let apple = '/assets/apple.svg'
 	let banana = '/assets/banana.svg'
 	let avocado = '/assets/avocado.svg'
@@ -210,8 +212,21 @@
 			break
 	}
 
+	const restartGameOnKeydownIfGameOver = () => {
+		gameOverKeydownCount += 1
+		if (gameOverKeydownCount >= 2) {
+			gameOverKeydownCount = 0
+			restart()
+		}
+	}
+
 	// controlls & key events
 	const handleKeydown = e => {
+		if (gameOver) {
+			restartGameOnKeydownIfGameOver()
+			return
+		}
+
 		const key = e.code
 		if (key === 'ArrowDown' || key === 'ArrowUp' || key === 'ArrowLeft' || key === 'ArrowRight')
 			e.preventDefault()
@@ -260,6 +275,9 @@
 			<ScoreSection {score} />
 		</div>
 		<GameBoard {gameOver}>
+			{#if gameOver}
+				<GameOverText />
+			{/if}
 			{#each squares as square}
 				<SquareContainer>
 					{#if snakeBody.some(box => box[0] == square[0] && box[1] == square[1])}

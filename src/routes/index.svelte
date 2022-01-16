@@ -141,7 +141,7 @@
 	}
 
 	// let snakeHead move in an interval
-	const snakeSpeedInMs = 80
+	const snakeSpeedInMs = 100
 	let clear: any
 	$: {
 		clearInterval(clear)

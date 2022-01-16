@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { browser } from '$app/env'
+	// import { browser } from '$app/env'
 	import { username } from '../stores'
 
 	export let score: number
 
-	$: if (browser) window.localStorage.setItem('username', $username)
+	// $: if (browser) window.localStorage.setItem('username', $username)
 </script>
 
 <div>Es spielt</div>

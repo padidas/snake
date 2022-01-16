@@ -12,6 +12,7 @@
 	class="bg-transparent h-8 border-2 px-2 rounded bg-emerald-100 border-blue-300 w-[160px] font-bold text-gray-600 text-lg"
 	placeholder="Name..."
 	bind:value={$username}
+	on:keydown|stopPropagation
 />
 <div
 	class="bg-transparent h-8 border-2 text-center w-16 px-2 rounded bg-emerald-100 border-blue-300 font-bold text-gray-600 text-lg"

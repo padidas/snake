@@ -95,10 +95,6 @@
 		}
 	}
 
-	$: console.log('lastFoodPos', lastFoodPos)
-	$: console.log('food', food)
-	$: console.log('growPos', growPos)
-
 	const grow = () => {
 		snakeBody = [...snakeBody, growPos]
 		growing = false

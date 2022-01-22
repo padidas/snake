@@ -2,7 +2,7 @@
 import { initializeApp } from 'firebase/app'
 import type { Score } from './model/Types'
 import { getFirestore, setDoc, doc, Timestamp } from 'firebase/firestore'
-import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check'
+// import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check'
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -14,13 +14,13 @@ import { firebaseConfig } from './firebaseConfig'
 const app = initializeApp(firebaseConfig)
 
 // Initialize AppCheck
-const appCheck = initializeAppCheck(app, {
-	provider: new ReCaptchaV3Provider('6LdlfxgeAAAAANVY24dztqNiaQ7msGl7FtdN4zcK'),
+// const appCheck = initializeAppCheck(app, {
+// 	provider: new ReCaptchaV3Provider('6LdlfxgeAAAAANVY24dztqNiaQ7msGl7FtdN4zcK'),
 
-	// Optional argument. If true, the SDK automatically refreshes App Check
-	// tokens as needed.
-	isTokenAutoRefreshEnabled: true,
-})
+// 	// Optional argument. If true, the SDK automatically refreshes App Check
+// 	// tokens as needed.
+// 	isTokenAutoRefreshEnabled: true,
+// })
 
 export const db = getFirestore(app)
 

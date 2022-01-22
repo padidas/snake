@@ -12,7 +12,7 @@
 	import { onMount } from 'svelte'
 	import type { Direction, HeadRotation, Square, Score } from '../model/Types'
 	import { saveScore } from '../firebase'
-	import { collection, query, orderBy, onSnapshot, doc, updateDoc, limit } from 'firebase/firestore'
+	import { collection, query, orderBy, onSnapshot, limit } from 'firebase/firestore'
 	import { db } from '../firebase'
 	import { v4 as uuid } from 'uuid'
 	import { username } from '../stores'
@@ -45,8 +45,6 @@
 	const squaresMax = 14
 	const initialSnakeHead: Square = [4, 3]
 	const initialSnakeBody: Square[] = [[4, 2]]
-	// TODO: remove initial snakeBody
-	// -> nessessary to check if snakeBody is not empty in other code blocks
 
 	snakeHead = initialSnakeHead
 	snakeBody = initialSnakeBody

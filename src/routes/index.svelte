@@ -42,12 +42,13 @@
 	let avocado = '/assets/avocado.svg'
 	let appleOrBanana = 0
 	// constants
-	const squaresMax = 14
-	const initialSnakeHead: Square = [4, 3]
-	const initialSnakeBody: Square[] = [[4, 2]]
+	const SQUARES_MAX = 14
+	const INITIAL_SNAKE_HEAD: Square = [4, 3]
+	const INITIAL_SNAKE_BODY: Square[] = [[4, 2]]
+	const BACKEND_URL = 'http://localhost:8080'
 
-	snakeHead = initialSnakeHead
-	snakeBody = initialSnakeBody
+	snakeHead = INITIAL_SNAKE_HEAD
+	snakeBody = INITIAL_SNAKE_BODY
 	nextBodyPartPos = snakeHead
 	food = [8, 6]
 
@@ -104,13 +105,13 @@
 		lastFoodPos = food
 		appleOrBanana = Math.floor(Math.random() * 3)
 		do {
-			food = [Math.floor(Math.random() * squaresMax), Math.floor(Math.random() * squaresMax)]
+			food = [Math.floor(Math.random() * SQUARES_MAX), Math.floor(Math.random() * SQUARES_MAX)]
 		} while (snakeBody.some(elem => elem[0] === food[0] && elem[1] === food[1]))
 	}
 
 	const initGameBoard = () => {
-		for (let i = 0; i < squaresMax; i++) {
-			for (let j = 0; j < squaresMax; j++) {
+		for (let i = 0; i < SQUARES_MAX; i++) {
+			for (let j = 0; j < SQUARES_MAX; j++) {
 				squares.push([i, j])
 			}
 		}
@@ -127,9 +128,9 @@
 
 	// collision detection (wall)
 	$: if (
-		snakeHead[0] >= squaresMax ||
+		snakeHead[0] >= SQUARES_MAX ||
 		snakeHead[0] < 0 ||
-		snakeHead[1] >= squaresMax ||
+		snakeHead[1] >= SQUARES_MAX ||
 		snakeHead[1] < 0
 	) {
 		console.log('COLLISION WITH WALL')
@@ -175,8 +176,8 @@
 	})
 
 	const restart = () => {
-		snakeHead = initialSnakeHead
-		snakeBody = initialSnakeBody
+		snakeHead = INITIAL_SNAKE_HEAD
+		snakeBody = INITIAL_SNAKE_BODY
 		direction = 'right'
 		gameOver = false
 		score = 0

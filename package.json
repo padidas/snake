@@ -34,7 +34,7 @@
   },
   "type": "module",
   "dependencies": {
-    "firebase": "^9.6.2",
-    "uuid": "^8.3.2"
+    "axios": "^0.25.0",
+    "bson-objectid": "^2.0.2"
   }
 }

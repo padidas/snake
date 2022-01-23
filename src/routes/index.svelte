@@ -11,12 +11,10 @@
 	import ScoreBoard from '../components/ScoreBoard.svelte'
 	import { onMount } from 'svelte'
 	import type { Direction, HeadRotation, Square, Score } from '../model/Types'
-	import { saveScore } from '../firebase'
-	import { collection, query, orderBy, onSnapshot, limit } from 'firebase/firestore'
-	import { db } from '../firebase'
-	import { v4 as uuid } from 'uuid'
+	import ObjectId from 'bson-objectid'
 	import { username } from '../stores'
 	import GameOverText from '../components/GameOverText.svelte'
+	import axios from 'axios'
 
 	// states
 	let squares: Array<Square> = []
@@ -30,7 +28,7 @@
 	let growPos: Square
 	let score = 0
 	let scores: Score[] = []
-	let currentScoreId: string = uuid()
+	let currentScoreId: string = ObjectId().toHexString()
 	let highscore: Score
 	let nextBodyPartPos: Square
 	let snakeBodyWithoutFirst: Square[]
@@ -41,27 +39,28 @@
 	let banana = '/assets/banana.svg'
 	let avocado = '/assets/avocado.svg'
 	let appleOrBanana = 0
+
 	// constants
 	const SQUARES_MAX = 14
 	const INITIAL_SNAKE_HEAD: Square = [4, 3]
 	const INITIAL_SNAKE_BODY: Square[] = [[4, 2]]
 	const BACKEND_URL = 'http://localhost:8080'
 
+	// initialization
 	snakeHead = INITIAL_SNAKE_HEAD
 	snakeBody = INITIAL_SNAKE_BODY
 	nextBodyPartPos = snakeHead
 	food = [8, 6]
 
-	export const getScores = (): void => {
-		const q = query(collection(db, 'scores'), orderBy('score', 'desc'), limit(10))
-		onSnapshot(q, querySnapshot => {
-			scores = querySnapshot.docs.map(doc => ({
-				username: doc.data().username,
-				score: doc.data().score,
-				scoreId: doc.id,
-				snakeLength: doc.data().snakeLength,
-			}))
-		})
+	export const getScores = async (): Promise<void> => {
+		console.log('GET SCORES')
+		const res = await axios.get(`${BACKEND_URL}/scores`)
+		scores = res.data.map(elem => ({
+			username: elem.username,
+			score: elem.score,
+			scoreId: elem.id,
+			snakeLength: elem.snakeLength,
+		}))
 	}
 
 	$: if (scores.length > 0)
@@ -137,12 +136,20 @@
 		gameOver = true
 	}
 
-	// let snakeHead move in an interval
-	const snakeSpeedInMs = 100
-	let clear: any
+	// get scores in an interval
+	const GET_SCORES_INTERVAL_IN_MS = 3000
+	let clearGetScoresInterval: NodeJS.Timer
 	$: {
-		clearInterval(clear)
-		clear = setInterval(moveSnakeHead, snakeSpeedInMs)
+		clearInterval(GET_SCORES_INTERVAL_IN_MS)
+		clearGetScoresInterval = setInterval(getCurrentScores, GET_SCORES_INTERVAL_IN_MS)
+	}
+
+	// let snakeHead move in an interval
+	const SNAKE_SPEED_IN_MS = 100
+	let clearMoveSnakeInterval: NodeJS.Timer
+	$: {
+		clearInterval(clearMoveSnakeInterval)
+		clearMoveSnakeInterval = setInterval(moveSnakeHead, SNAKE_SPEED_IN_MS)
 	}
 
 	const moveSnakeHead = () => {
@@ -181,16 +188,18 @@
 		direction = 'right'
 		gameOver = false
 		score = 0
-		currentScoreId = uuid()
+		currentScoreId = ObjectId().toHexString()
 	}
 
 	const saveNewScore = async () => {
-		await saveScore(currentScoreId, {
-			username: $username,
-			score,
+		console.log('SAVE NEW SCORE')
+		await axios.post(`${BACKEND_URL}/scores`, {
 			scoreId: currentScoreId,
+			username: $username,
+			score: score,
 			snakeLength: snakeBody.length,
 		})
+		getCurrentScores()
 	}
 
 	// snakeHead rotation

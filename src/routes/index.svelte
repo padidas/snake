@@ -44,7 +44,7 @@
 	const SQUARES_MAX = 14
 	const INITIAL_SNAKE_HEAD: Square = [4, 3]
 	const INITIAL_SNAKE_BODY: Square[] = [[4, 2]]
-	const BACKEND_URL = 'http://localhost:8080'
+	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
 	// initialization
 	snakeHead = INITIAL_SNAKE_HEAD

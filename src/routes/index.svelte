@@ -320,6 +320,6 @@
 
 <style global>
 	.growing {
-		background-color: rgb(238, 165, 29) !important;
+		background-color: rgb(255, 173, 22) !important;
 	}
 </style>

@@ -3,6 +3,17 @@
 @tailwind utilities;
 
 body {
-	background-color: darkslategray;
+	background-color: rgb(115, 180, 253);
 	background-image: url('/assets/forest.png');
+	background-attachment: fixed;
+}
+
+@layer components {
+	.dark-gradient {
+		@apply bg-gradient-to-br from-sky-800 to-slate-800;
+	}
+
+	.snake-color {
+		@apply bg-gray-400 shadow-inner;
+	}
 }

@@ -2,4 +2,4 @@
 	export let growing
 </script>
 
-<div class="w-[24px] h-[24px] bg-emerald-600" class:growing />
+<div class="w-[24px] h-[24px] snake-color" class:growing />

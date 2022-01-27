@@ -7,14 +7,16 @@
 	// $: if (browser) window.localStorage.setItem('username', $username)
 </script>
 
-<input
-	class="h-8 border-2 px-2 rounded bg-gradient-to-br from-cyan-900 to-black border-blue-300 font-bold text-gray-600 text-lg"
-	placeholder="Dein Name..."
-	bind:value={$username}
-	on:keydown|stopPropagation
-/>
-<div
-	class="h-8 border-2 text-center w-16 px-2 rounded bg-gradient-to-br from-cyan-900 to-black border-blue-300 font-bold  text-lg"
->
-	{score}
+<div class="flex w-[336px] justify-between items-center mb-2">
+	<input
+		class="h-8 px-2 rounded bg-opacity-25 backdrop-filter backdrop-blur-lg font-semibold w-full mr-4 text-gray-900 text-lg"
+		placeholder="your name..."
+		bind:value={$username}
+		on:keydown|stopPropagation
+	/>
+	<div
+		class="w-12 flex justify-center items-center shadow-md text-center h-8 rounded-full px-2 bg-amber-300 text-black font-bold text-lg"
+	>
+		{score}
+	</div>
 </div>

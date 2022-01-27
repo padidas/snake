@@ -14,6 +14,7 @@
 	import ObjectId from 'bson-objectid'
 	import { username } from '../stores'
 	import GameOverText from '../components/GameOverText.svelte'
+	import SnakeLengthInfo from '../components/SnakeLengthInfo.svelte'
 	import axios from 'axios'
 
 	// states
@@ -279,9 +280,7 @@
 
 <GameContainer>
 	<SubContainer>
-		<div class="flex w-[344px] justify-between items-center mb-2">
-			<ScoreSection {score} />
-		</div>
+		<ScoreSection {score} />
 		<GameBoard>
 			{#if gameOver}
 				<GameOverText />
@@ -308,13 +307,9 @@
 				</SquareContainer>
 			{/each}
 		</GameBoard>
-		<div class="flex flex-1 w-[344px] h-[50px] p-1 justify-between items-start">
-			<div>
-				snake length: {snakeBody.length}
-			</div>
-			<div>
-				<RestartButton {restart} />
-			</div>
+		<div class="flex flex-1 w-[336px] h-[50px] py-1 justify-between items-start">
+			<SnakeLengthInfo snakeLengthInfo={snakeBody.length} />
+			<RestartButton {restart} />
 		</div>
 	</SubContainer>
 	<SubContainer>
@@ -325,6 +320,6 @@
 
 <style global>
 	.growing {
-		background-color: rgb(16, 100, 65) !important;
+		background-color: rgb(238, 165, 29) !important;
 	}
 </style>

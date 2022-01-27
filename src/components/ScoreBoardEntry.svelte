@@ -8,7 +8,7 @@
 
 <div
 	class:highlighted={currentScoreId === no.scoreId}
-	class="flex w-5/12 h-11 font-semibold justify-between text-sm items-center rounded-md bg-gradient-to-br from-cyan-900 to-slate-900 shadow-lg mb-3 pl-2 pr-1"
+	class="flex w-5/12 h-11 font-semibold justify-between text-sm items-center rounded-md dark-gradient shadow-lg mb-3 pl-2 pr-1 text-gray-100"
 >
 	<div>{i + 1}.</div>
 	<div class="flex flex-col flex-grow ml-2 mr-1">

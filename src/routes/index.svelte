@@ -282,7 +282,7 @@
 		<div class="flex w-[344px] justify-between items-center mb-2">
 			<ScoreSection {score} />
 		</div>
-		<GameBoard {gameOver}>
+		<GameBoard>
 			{#if gameOver}
 				<GameOverText />
 			{/if}

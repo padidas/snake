@@ -7,8 +7,9 @@
 </script>
 
 <div
-	class:highlighted={currentScoreId === no.scoreId}
-	class="flex w-5/12 h-11 font-semibold justify-between text-sm items-center rounded-md dark-gradient shadow-lg mb-3 pl-2 pr-1 text-gray-100"
+	class="flex w-5/12 h-11 font-semibold justify-between text-sm items-center rounded-md shadow-lg mb-3 pl-2 pr-1 text-gray-100"
+	class:dark-gradient-highlighted={currentScoreId === no.scoreId}
+	class:dark-gradient={currentScoreId != no.scoreId}
 >
 	<div>{i + 1}.</div>
 	<div class="flex flex-col flex-grow ml-2 mr-1">
@@ -27,9 +28,3 @@
 		{no.score}
 	</div>
 </div>
-
-<style>
-	.highlighted {
-		box-shadow: 0px 0px 10px rgb(226, 226, 226);
-	}
-</style>

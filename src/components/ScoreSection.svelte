@@ -9,7 +9,7 @@
 
 <div class="flex w-[336px] justify-between items-center mb-2">
 	<input
-		class="h-8 px-2 rounded bg-opacity-25 backdrop-filter backdrop-blur-lg font-semibold w-full mr-4 text-gray-900 text-lg"
+		class="h-8 px-2 rounded dark-gradient backdrop-filter backdrop-blur-lg font-semibold w-full mr-4 text-lg"
 		placeholder="your name..."
 		bind:value={$username}
 		on:keydown|stopPropagation

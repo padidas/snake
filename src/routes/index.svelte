@@ -312,6 +312,20 @@
 			<RestartButton {restart} />
 		</div>
 	</SubContainer>
+	<div class="flex w-[336px] h-16 justify-between md:hidden">
+		<div
+			on:click={rotateLeft}
+			class="flex justify-center uppercase items-center dark-gradient rounded-full border-2 border-white w-40"
+		>
+			turn left
+		</div>
+		<div
+			on:click={rotateRight}
+			class="flex justify-center uppercase items-center dark-gradient rounded-full border-2 border-white w-40"
+		>
+			turn right
+		</div>
+	</div>
 	<SubContainer>
 		<!-- <Controls {goDown} {goLeft} {goUp} {goRight} {rotateLeft} {rotateRight} /> -->
 		<ScoreBoard {scores} {currentScoreId} />

@@ -190,6 +190,7 @@
 		gameOver = false
 		score = 0
 		currentScoreId = ObjectId().toHexString()
+		growing = false
 	}
 
 	const saveNewScore = async () => {

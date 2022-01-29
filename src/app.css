@@ -22,7 +22,7 @@ body {
 	}
 
 	.dark-gradient-highlighted {
-		@apply bg-gradient-to-br from-sky-600 to-slate-600;
+		@apply bg-gradient-to-br from-yellow-500 to-slate-600;
 	}
 
 	.snake-color {

@@ -7,6 +7,7 @@
 	import SquareContainer from '../components/SquareContainer.svelte'
 	import SubContainer from '../components/Layout/SubContainer.svelte'
 	import GameContainer from '../components/Layout/GameContainer.svelte'
+	import Controls from '../components/Controls.svelte'
 	import GameBoard from '../components/GameBoard.svelte'
 	import ScoreBoard from '../components/ScoreBoard.svelte'
 	import { onMount } from 'svelte'
@@ -293,7 +294,7 @@
 					{:else if snakeHead[0] == square[0] && snakeHead[1] == square[1]}
 						<SnakeHead {headRotation} {growing} />
 					{:else if food[0] == square[0] && food[1] == square[1]}
-						<GameBoardTile>
+						<GameBoardTile {square}>
 							{#if appleOrBanana === 0}
 								<img src={apple} alt="an apple" />
 							{:else if appleOrBanana === 1}
@@ -303,32 +304,21 @@
 							{/if}
 						</GameBoardTile>
 					{:else}
-						<GameBoardTile />
+						<GameBoardTile {square} />
 					{/if}
 				</SquareContainer>
 			{/each}
 		</GameBoard>
-		<div class="flex flex-1 w-[336px] h-[50px] py-1 justify-between items-start">
+		<div class="flex w-[336px] h-[50px] justify-between items-center">
 			<SnakeLengthInfo snakeLengthInfo={snakeBody.length} />
 			<RestartButton {restart} />
 		</div>
 	</SubContainer>
 	<div class="flex w-[336px] h-16 justify-between md:hidden">
-		<div
-			on:click={rotateLeft}
-			class="flex justify-center uppercase items-center dark-gradient rounded-full border-2 border-white w-40"
-		>
-			turn left
-		</div>
-		<div
-			on:click={rotateRight}
-			class="flex justify-center uppercase items-center dark-gradient rounded-full border-2 border-white w-40"
-		>
-			turn right
-		</div>
+		<Controls controlFunction={rotateLeft} label={'turn left'} />
+		<Controls controlFunction={rotateRight} label={'turn right'} />
 	</div>
 	<SubContainer>
-		<!-- <Controls {goDown} {goLeft} {goUp} {goRight} {rotateLeft} {rotateRight} /> -->
 		<ScoreBoard {scores} {currentScoreId} />
 	</SubContainer>
 </GameContainer>

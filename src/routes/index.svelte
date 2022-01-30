@@ -16,9 +16,10 @@
 	import { username } from '../stores'
 	import GameOverText from '../components/GameOverText.svelte'
 	import SnakeLengthInfo from '../components/SnakeLengthInfo.svelte'
+	import ActivePlayers from '../components/ActivePlayers.svelte'
 	import axios from 'axios'
 
-	// states
+	// states //
 	let squares: Array<Square> = []
 	let snakeHead: Square
 	let snakeBody: Square[]
@@ -30,6 +31,7 @@
 	let growPos: Square
 	let score = 0
 	let scores: Score[] = []
+	let activeScores: Score[] = []
 	let currentScoreId: string = ObjectId().toHexString()
 	let highscore: Score
 	let nextBodyPartPos: Square
@@ -42,22 +44,35 @@
 	let avocado = '/assets/avocado.svg'
 	let appleOrBanana = 0
 
-	// constants
+	// constants //
 	const SQUARES_MAX = 14
 	const INITIAL_SNAKE_HEAD: Square = [4, 3]
 	const INITIAL_SNAKE_BODY: Square[] = [[4, 2]]
 	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+	const SNAKE_SPEED_IN_MS = 100
+	const GET_SCORES_INTERVAL_IN_MS = 3000
 
-	// initialization
+	// initialization //
 	snakeHead = INITIAL_SNAKE_HEAD
 	snakeBody = INITIAL_SNAKE_BODY
 	nextBodyPartPos = snakeHead
 	food = [8, 6]
 
-	export const getScores = async (): Promise<void> => {
-		console.log('GET SCORES')
-		const res = await axios.get(`${BACKEND_URL}/scores`)
+	const fetchTopScores = async (): Promise<void> => {
+		console.log('fetchTopScores')
+		const res = await axios.get(`${BACKEND_URL}/scores/topScores`)
 		scores = res.data.map(elem => ({
+			username: elem.username,
+			score: elem.score,
+			scoreId: elem.id,
+			snakeLength: elem.snakeLength,
+		}))
+	}
+
+	const fetchActiveScores = async (): Promise<void> => {
+		console.log('fetchActiveScores')
+		const res = await axios.get(`${BACKEND_URL}/scores/activeScores`)
+		activeScores = res.data.map(elem => ({
 			username: elem.username,
 			score: elem.score,
 			scoreId: elem.id,
@@ -72,11 +87,14 @@
 		})
 
 	onMount(async () => {
-		getCurrentScores()
+		getScores()
+		setInterval(getScores, GET_SCORES_INTERVAL_IN_MS)
+		setInterval(moveSnakeHead, SNAKE_SPEED_IN_MS)
 	})
 
-	const getCurrentScores = async () => {
-		getScores()
+	const getScores = async () => {
+		fetchTopScores()
+		fetchActiveScores()
 	}
 
 	$: lastSnakeBodyPart = snakeBody[snakeBody.length - 1]
@@ -138,21 +156,21 @@
 		gameOver = true
 	}
 
-	// get scores in an interval
-	const GET_SCORES_INTERVAL_IN_MS = 3000
-	let clearGetScoresInterval: NodeJS.Timer
-	$: {
-		clearInterval(GET_SCORES_INTERVAL_IN_MS)
-		clearGetScoresInterval = setInterval(getCurrentScores, GET_SCORES_INTERVAL_IN_MS)
-	}
+	// // get scores in an interval
+	// const GET_SCORES_INTERVAL_IN_MS = 3000
+	// let clearGetScoresInterval: NodeJS.Timer
+	// $: {
+	// 	clearInterval(clearGetScoresInterval)
+	// 	clearGetScoresInterval = setInterval(getCurrentScores, GET_SCORES_INTERVAL_IN_MS)
+	// }
 
-	// let snakeHead move in an interval
-	const SNAKE_SPEED_IN_MS = 100
-	let clearMoveSnakeInterval: NodeJS.Timer
-	$: {
-		clearInterval(clearMoveSnakeInterval)
-		clearMoveSnakeInterval = setInterval(moveSnakeHead, SNAKE_SPEED_IN_MS)
-	}
+	// // let snakeHead move in an interval
+	// const SNAKE_SPEED_IN_MS = 100
+	// let clearMoveSnakeInterval: NodeJS.Timer
+	// $: {
+	// 	clearInterval(clearMoveSnakeInterval)
+	// 	clearMoveSnakeInterval = setInterval(moveSnakeHead, SNAKE_SPEED_IN_MS)
+	// }
 
 	const moveSnakeHead = () => {
 		if (gameOver) return
@@ -202,7 +220,7 @@
 			score: score,
 			snakeLength: snakeBody.length,
 		})
-		getCurrentScores()
+		getScores()
 	}
 
 	// snakeHead rotation
@@ -320,6 +338,9 @@
 	</div>
 	<SubContainer>
 		<ScoreBoard {scores} {currentScoreId} />
+	</SubContainer>
+	<SubContainer>
+		<ActivePlayers {activeScores} />
 	</SubContainer>
 </GameContainer>
 

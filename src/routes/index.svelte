@@ -346,6 +346,6 @@
 
 <style global>
 	.growing {
-		background-color: rgb(255, 173, 22) !important;
+		background-color: rgb(163 230 53) !important;
 	}
 </style>

@@ -18,14 +18,14 @@ body {
 
 @layer components {
 	.dark-gradient {
-		@apply bg-gradient-to-br from-sky-800 to-slate-800;
+		@apply bg-gradient-to-br from-sky-700 to-sky-900;
 	}
 
 	.dark-gradient-highlighted {
-		@apply bg-gradient-to-br from-yellow-500 to-slate-600;
+		@apply bg-gradient-to-br from-yellow-500 to-sky-700;
 	}
 
 	.snake-color {
-		@apply bg-yellow-300 shadow-inner;
+		@apply bg-lime-600;
 	}
 }

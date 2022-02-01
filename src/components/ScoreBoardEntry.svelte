@@ -11,7 +11,7 @@
 	class="flex w-[156px] h-11 font-semibold justify-between text-sm items-center rounded-md bg-opacity-10 bg-white mb-3 px-2"
 	class:dark-gradient-highlighted={currentScoreId === no.scoreId}
 >
-	<div>{i === 0 ? '👑' : i + 1}.</div>
+	<div>{i === 0 ? '👑' : i + 1 + '.'}</div>
 	<div class="flex flex-col flex-grow ml-2 mr-1">
 		<div>
 			{no.username}

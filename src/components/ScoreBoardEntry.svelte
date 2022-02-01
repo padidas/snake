@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Score } from '../model/Types'
+	import ScoreBubble from './ScoreBubble.svelte'
 
 	export let no: Score
 	export let i: number
@@ -7,24 +8,17 @@
 </script>
 
 <div
-	class="flex w-5/12 h-11 font-semibold justify-between text-sm items-center rounded-md shadow-lg mb-3 pl-2 pr-1 text-gray-100"
+	class="flex w-[156px] h-11 font-semibold justify-between text-sm items-center rounded-md bg-opacity-10 bg-white mb-3 px-2"
 	class:dark-gradient-highlighted={currentScoreId === no.scoreId}
-	class:dark-gradient={currentScoreId != no.scoreId}
 >
-	<div>{i + 1}.</div>
+	<div>{i === 0 ? '👑' : i + 1}.</div>
 	<div class="flex flex-col flex-grow ml-2 mr-1">
 		<div>
 			{no.username}
 		</div>
-		{#if no.snakeLength}
-			<div class="text-xs">
-				length: {no.snakeLength}
-			</div>
-		{/if}
+		<div class="text-xs">
+			length: {no.snakeLength}
+		</div>
 	</div>
-	<div
-		class="flex justify-center items-center bg-amber-300 text-black font-bold rounded-full w-6 h-6"
-	>
-		{no.score}
-	</div>
+	<ScoreBubble score={no.score} />
 </div>

@@ -327,7 +327,7 @@
 				</SquareContainer>
 			{/each}
 		</GameBoard>
-		<div class="flex w-[336px] h-[50px] justify-between items-center">
+		<div class="flex w-[336px] h-[40px] justify-between items-center">
 			<SnakeLengthInfo snakeLengthInfo={snakeBody.length} />
 			<RestartButton {restart} />
 		</div>

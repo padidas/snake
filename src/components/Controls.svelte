@@ -4,7 +4,7 @@
 </script>
 
 <button
-	on:click={controlFunction}
+	on:mousedown={controlFunction}
 	class="flex justify-center uppercase items-center dark-gradient rounded-md border-2 border-white w-40"
 >
 	{label}

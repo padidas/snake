@@ -1,19 +1,16 @@
 <script lang="ts">
 	import { username } from '../stores'
+	import ScoreBubble from './ScoreBubble.svelte'
 
 	export let score: number
 </script>
 
-<div class="flex w-[336px] h-[50px] justify-between items-center">
+<div class="flex w-[336px] h-[40px] justify-between items-center">
 	<input
-		class="h-8 px-2 rounded dark-gradient backdrop-filter backdrop-blur-lg font-semibold w-full mr-4 text-lg"
-		placeholder="your name..."
+		class="flex flex-1 h-6 px-2 rounded dark-gradient backdrop-filter backdrop-blur-lg font-semibold mr-4"
+		placeholder="Name..."
 		bind:value={$username}
 		on:keydown|stopPropagation
 	/>
-	<div
-		class="w-12 flex justify-center items-center shadow-md text-center h-8 rounded-full px-2 bg-amber-300 text-black font-bold text-lg"
-	>
-		{score}
-	</div>
+	<ScoreBubble {score} />
 </div>

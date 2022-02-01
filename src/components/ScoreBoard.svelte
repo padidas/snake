@@ -6,10 +6,8 @@
 	export let currentScoreId: string = ''
 </script>
 
-<div
-	class="w-[344px] h-[336px] flex flex-col bg-opacity-25 bg-white backdrop-blur-lg shadow-lg rounded mb-4 md:mb-0"
->
-	<div class="flex flex-col font-extrabold text-xl p-3 text-sky-900 items-center">
+<div class="w-[344px] h-[336px] flex flex-col dark-gradient shadow-lg rounded mb-4 md:mb-0">
+	<div class="flex flex-col font-extrabold text-xl p-3 items-center">
 		<div>Score Board</div>
 	</div>
 	<div class="flex flex-col flex-wrap h-[300px] items-center">

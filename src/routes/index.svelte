@@ -43,6 +43,7 @@
 	let banana = '/assets/banana.svg'
 	let avocado = '/assets/avocado.svg'
 	let appleOrBanana = 0
+	let rotationQueue: Direction[] = []
 
 	// constants //
 	const SQUARES_MAX = 14
@@ -174,6 +175,9 @@
 
 	const moveSnakeHead = () => {
 		if (gameOver) return
+		direction = rotationQueue[0] ?? direction
+		rotationQueue = rotationQueue.filter((elem, i) => i != 0)
+
 		switch (direction) {
 			case 'up':
 				snakeHead = [snakeHead[0] - 1, snakeHead[1]]
@@ -267,19 +271,19 @@
 	}
 
 	const goUp = () => {
-		if (direction !== 'down') direction = 'up'
+		if (direction !== 'down') rotationQueue = [...rotationQueue, 'up']
 	}
 
 	const goDown = () => {
-		if (direction !== 'up') direction = 'down'
+		if (direction !== 'up') rotationQueue = [...rotationQueue, 'down']
 	}
 
 	const goLeft = () => {
-		if (direction !== 'right') direction = 'left'
+		if (direction !== 'right') rotationQueue = [...rotationQueue, 'left']
 	}
 
 	const goRight = () => {
-		if (direction !== 'left') direction = 'right'
+		if (direction !== 'left') rotationQueue = [...rotationQueue, 'right']
 	}
 
 	const rotateRight = () => {

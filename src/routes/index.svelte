@@ -146,32 +146,13 @@
 		gameOver = true
 	}
 
-	// collision detection (wall)
-	$: if (
-		snakeHead[0] >= SQUARES_MAX ||
-		snakeHead[0] < 0 ||
-		snakeHead[1] >= SQUARES_MAX ||
-		snakeHead[1] < 0
-	) {
-		console.log('COLLISION WITH WALL')
-		gameOver = true
+	// allow snake to go through walls
+	$: {
+		if (snakeHead[0] >= SQUARES_MAX) snakeHead[0] = 0
+		if (snakeHead[0] < 0) snakeHead[0] = SQUARES_MAX - 1
+		if (snakeHead[1] >= SQUARES_MAX) snakeHead[1] = 0
+		if (snakeHead[1] < 0) snakeHead[1] = SQUARES_MAX - 1
 	}
-
-	// // get scores in an interval
-	// const GET_SCORES_INTERVAL_IN_MS = 3000
-	// let clearGetScoresInterval: NodeJS.Timer
-	// $: {
-	// 	clearInterval(clearGetScoresInterval)
-	// 	clearGetScoresInterval = setInterval(getCurrentScores, GET_SCORES_INTERVAL_IN_MS)
-	// }
-
-	// // let snakeHead move in an interval
-	// const SNAKE_SPEED_IN_MS = 100
-	// let clearMoveSnakeInterval: NodeJS.Timer
-	// $: {
-	// 	clearInterval(clearMoveSnakeInterval)
-	// 	clearMoveSnakeInterval = setInterval(moveSnakeHead, SNAKE_SPEED_IN_MS)
-	// }
 
 	const moveSnakeHead = () => {
 		if (gameOver) return

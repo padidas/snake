@@ -8,18 +8,20 @@
 </script>
 
 <div
-	class="relative flex w-[156px] h-11 font-semibold justify-between text-sm items-center rounded-md bg-opacity-10 bg-white mb-3 px-2"
+	class="relative flex w-[156px] h-11 font-semibold justify-between flex-nowrap text-sm items-center rounded-md bg-opacity-10 bg-white mb-3 px-2"
 	class:dark-gradient-highlighted={currentScoreId === no.scoreId}
-	title="snake length: {no.snakeLength}"
+	title="🐍 {no.username} &#013;🏆 {no.score} (score) &#013;📏 {no.snakeLength} (length)"
 >
 	{#if i === 0}
 		<img src="/assets/crown.png" alt="a crown" class="absolute -top-3 -left-2 -rotate-12 h-5" />
 	{/if}
-	<div>{i + 1 + '.'}</div>
-	<div class="flex flex-col flex-grow ml-2 mr-1">
-		<div>
-			{no.username}
+	<div class="flex flex-1 min-w-0">
+		<div class="mr-1">
+			{i + 1 + '.'}
 		</div>
+		<p class="text-ellipsis overflow-hidden whitespace-nowrap z-10 font-bold">
+			{no.username}
+		</p>
 	</div>
 	<ScoreBubble score={no.score} />
 </div>

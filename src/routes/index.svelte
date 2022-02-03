@@ -348,9 +348,3 @@
 		<ActivePlayers {activeScores} />
 	</SubContainer>
 </GameContainer>
-
-<style global>
-	.growing {
-		background-color: rgb(163 230 53) !important;
-	}
-</style>

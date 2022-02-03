@@ -28,4 +28,8 @@ body {
 	.snake-color {
 		@apply bg-lime-600;
 	}
+
+	.growing {
+		@apply bg-lime-400;
+	}
 }

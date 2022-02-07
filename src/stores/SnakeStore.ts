@@ -8,7 +8,6 @@ export const snakeHead = writable(INITIAL_SNAKE_HEAD)
 export const snakeBody = writable(INITIAL_SNAKE_BODY)
 
 export const lastSnakeBodyPart = derived(snakeBody, $snakeBody => $snakeBody[$snakeBody.length - 1])
-
 export const snakeBodyWithoutFirst = derived(snakeBody, $snakeBody =>
 	$snakeBody.filter((_, i) => i !== 0),
 )

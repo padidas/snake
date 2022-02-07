@@ -29,7 +29,7 @@
 
 	// states //
 	let squares: Array<Square> = []
-	let food: Square
+	let food: Square = [8, 6]
 	let gameOver = false
 	let direction: Direction = 'right'
 	let growing: boolean = false
@@ -54,10 +54,6 @@
 	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 	const SNAKE_SPEED_IN_MS = 100
 	const GET_SCORES_INTERVAL_IN_MS = 3000
-
-	// initialization //
-	nextBodyPartPos = $snakeHead
-	food = [8, 6]
 
 	const fetchTopScores = async (): Promise<void> => {
 		console.log('fetchTopScores')

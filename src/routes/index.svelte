@@ -1,4 +1,12 @@
 <script lang="ts">
+	import {
+		INITIAL_SNAKE_HEAD,
+		INITIAL_SNAKE_BODY,
+		snakeHead,
+		snakeBody,
+		lastSnakeBodyPart,
+		snakeBodyWithoutFirst,
+	} from '../stores/SnakeStore'
 	import GameBoardTile from '../components/GameBoardTile.svelte'
 	import RestartButton from '../components/RestartButton.svelte'
 	import ScoreSection from '../components/ScoreSection.svelte'
@@ -21,9 +29,7 @@
 
 	// states //
 	let squares: Array<Square> = []
-	let snakeHead: Square
-	let snakeBody: Square[]
-	let food: Square
+	let food: Square = [8, 6]
 	let gameOver = false
 	let direction: Direction = 'right'
 	let growing: boolean = false
@@ -35,8 +41,6 @@
 	let currentScoreId: string = ObjectId().toHexString()
 	let highscore: Score
 	let nextBodyPartPos: Square
-	let snakeBodyWithoutFirst: Square[]
-	let lastSnakeBodyPart: Square
 	let headRotation: HeadRotation
 	let gameOverKeydownCount = 0
 	let apple = '/assets/apple.svg'
@@ -47,17 +51,9 @@
 
 	// constants //
 	const SQUARES_MAX = 14
-	const INITIAL_SNAKE_HEAD: Square = [4, 3]
-	const INITIAL_SNAKE_BODY: Square[] = [[4, 2]]
 	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 	const SNAKE_SPEED_IN_MS = 100
 	const GET_SCORES_INTERVAL_IN_MS = 3000
-
-	// initialization //
-	snakeHead = INITIAL_SNAKE_HEAD
-	snakeBody = INITIAL_SNAKE_BODY
-	nextBodyPartPos = snakeHead
-	food = [8, 6]
 
 	const fetchTopScores = async (): Promise<void> => {
 		console.log('fetchTopScores')
@@ -98,10 +94,8 @@
 		fetchActiveScores()
 	}
 
-	$: lastSnakeBodyPart = snakeBody[snakeBody.length - 1]
-
 	// eating
-	$: if (food[0] == snakeHead[0] && food[1] == snakeHead[1]) {
+	$: if (food[0] == $snakeHead[0] && food[1] == $snakeHead[1]) {
 		score = score + 1
 		growPos = food
 		resetFood()
@@ -109,15 +103,8 @@
 		saveNewScore()
 	}
 
-	// checking when to grow
-	$: {
-		if (growing == true) {
-			if (lastSnakeBodyPart[0] === growPos[0] && lastSnakeBodyPart[1] === growPos[1]) grow()
-		}
-	}
-
 	const grow = () => {
-		snakeBody = [...snakeBody, growPos]
+		snakeBody.update(sb => [...sb, growPos])
 		growing = false
 	}
 
@@ -126,7 +113,7 @@
 		appleOrBanana = Math.floor(Math.random() * 3)
 		do {
 			food = [Math.floor(Math.random() * SQUARES_MAX), Math.floor(Math.random() * SQUARES_MAX)]
-		} while (snakeBody.some(elem => elem[0] === food[0] && elem[1] === food[1]))
+		} while ($snakeBody.some(elem => elem[0] === food[0] && elem[1] === food[1]))
 	}
 
 	const initGameBoard = () => {
@@ -138,20 +125,20 @@
 	}
 	initGameBoard()
 
-	$: snakeBodyWithoutFirst = snakeBody.filter((_, i) => i !== 0)
-
 	// collision detection (body)
-	$: if (snakeBodyWithoutFirst.some(elem => elem[0] === snakeHead[0] && elem[1] === snakeHead[1])) {
+	$: if (
+		$snakeBodyWithoutFirst.some(elem => elem[0] === $snakeHead[0] && elem[1] === $snakeHead[1])
+	) {
 		console.log('COLLISION WITH SNAKE BODY')
 		gameOver = true
 	}
 
 	// allow snake to go through walls
 	$: {
-		if (snakeHead[0] >= SQUARES_MAX) snakeHead[0] = 0
-		if (snakeHead[0] < 0) snakeHead[0] = SQUARES_MAX - 1
-		if (snakeHead[1] >= SQUARES_MAX) snakeHead[1] = 0
-		if (snakeHead[1] < 0) snakeHead[1] = SQUARES_MAX - 1
+		if ($snakeHead[0] >= SQUARES_MAX) snakeHead.update(sh => [0, sh[1]])
+		if ($snakeHead[0] < 0) snakeHead.update(sh => [SQUARES_MAX - 1, sh[1]])
+		if ($snakeHead[1] >= SQUARES_MAX) snakeHead.update(sh => [sh[0], 0])
+		if ($snakeHead[1] < 0) snakeHead.update(sh => [sh[0], SQUARES_MAX - 1])
 	}
 
 	const moveSnakeHead = () => {
@@ -161,35 +148,41 @@
 
 		switch (direction) {
 			case 'up':
-				snakeHead = [snakeHead[0] - 1, snakeHead[1]]
+				snakeHead.update(sh => [sh[0] - 1, sh[1]])
 				break
 			case 'down':
-				snakeHead = [snakeHead[0] + 1, snakeHead[1]]
+				snakeHead.update(sh => [sh[0] + 1, sh[1]])
 				break
 			case 'left':
-				snakeHead = [snakeHead[0], snakeHead[1] - 1]
+				snakeHead.update(sh => [sh[0], sh[1] - 1])
 				break
 			case 'right':
-				snakeHead = [snakeHead[0], snakeHead[1] + 1]
+				snakeHead.update(sh => [sh[0], sh[1] + 1])
 				break
 			default:
 				break
 		}
+
+		if (growing == true) {
+			if ($lastSnakeBodyPart[0] === growPos[0] && $lastSnakeBodyPart[1] === growPos[1]) grow()
+		}
 	}
 
-	$: nextBodyPartPos = snakeHead
+	$: nextBodyPartPos = $snakeHead
 
 	// move snakeBody depending on snakeHead
-	$: snakeBody = snakeBody?.map(elem => {
-		snakeHead // this line is only for reactivity
-		let newPos = nextBodyPartPos
-		nextBodyPartPos = elem
-		return newPos
-	})
+	$: snakeBody.update(sb =>
+		sb?.map(elem => {
+			$snakeHead // this line is only for reactivity
+			let newPos = nextBodyPartPos
+			nextBodyPartPos = elem
+			return newPos
+		}),
+	)
 
 	const restart = () => {
-		snakeHead = INITIAL_SNAKE_HEAD
-		snakeBody = INITIAL_SNAKE_BODY
+		snakeHead.set(INITIAL_SNAKE_HEAD)
+		snakeBody.set(INITIAL_SNAKE_BODY)
 		direction = 'right'
 		gameOver = false
 		score = 0
@@ -203,7 +196,7 @@
 			scoreId: currentScoreId,
 			username: $username,
 			score: score,
-			snakeLength: snakeBody.length,
+			snakeLength: $snakeBody.length,
 		})
 		getScores()
 	}
@@ -293,10 +286,10 @@
 			{/if}
 			{#each squares as square}
 				<SquareContainer>
-					{#if snakeBody.some(box => box[0] == square[0] && box[1] == square[1])}
-						<SnakeBody {growing} />
-					{:else if snakeHead[0] == square[0] && snakeHead[1] == square[1]}
+					{#if $snakeHead[0] == square[0] && $snakeHead[1] == square[1]}
 						<SnakeHead {headRotation} {growing} />
+					{:else if $snakeBody.some(box => box[0] == square[0] && box[1] == square[1])}
+						<SnakeBody {growing} />
 					{:else if food[0] == square[0] && food[1] == square[1]}
 						<GameBoardTile {square}>
 							{#if appleOrBanana === 0}
@@ -314,7 +307,7 @@
 			{/each}
 		</GameBoard>
 		<div class="flex w-[336px] h-[40px] justify-between items-center">
-			<SnakeLengthInfo snakeLengthInfo={snakeBody.length} />
+			<SnakeLengthInfo snakeLengthInfo={$snakeBody.length} />
 			<RestartButton {restart} />
 		</div>
 	</SubContainer>

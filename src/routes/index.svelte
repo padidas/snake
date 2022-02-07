@@ -1,6 +1,8 @@
 <script lang="ts">
 	import {
+		INITIAL_SNAKE_HEAD,
 		INITIAL_SNAKE_BODY,
+		snakeHead,
 		snakeBody,
 		lastSnakeBodyPart,
 		snakeBodyWithoutFirst,
@@ -27,7 +29,6 @@
 
 	// states //
 	let squares: Array<Square> = []
-	let snakeHead: Square
 	let food: Square
 	let gameOver = false
 	let direction: Direction = 'right'
@@ -50,14 +51,12 @@
 
 	// constants //
 	const SQUARES_MAX = 14
-	const INITIAL_SNAKE_HEAD: Square = [4, 3]
 	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 	const SNAKE_SPEED_IN_MS = 100
 	const GET_SCORES_INTERVAL_IN_MS = 3000
 
 	// initialization //
-	snakeHead = INITIAL_SNAKE_HEAD
-	nextBodyPartPos = snakeHead
+	nextBodyPartPos = $snakeHead
 	food = [8, 6]
 
 	const fetchTopScores = async (): Promise<void> => {
@@ -100,7 +99,7 @@
 	}
 
 	// eating
-	$: if (food[0] == snakeHead[0] && food[1] == snakeHead[1]) {
+	$: if (food[0] == $snakeHead[0] && food[1] == $snakeHead[1]) {
 		score = score + 1
 		growPos = food
 		resetFood()
@@ -132,7 +131,7 @@
 
 	// collision detection (body)
 	$: if (
-		$snakeBodyWithoutFirst.some(elem => elem[0] === snakeHead[0] && elem[1] === snakeHead[1])
+		$snakeBodyWithoutFirst.some(elem => elem[0] === $snakeHead[0] && elem[1] === $snakeHead[1])
 	) {
 		console.log('COLLISION WITH SNAKE BODY')
 		gameOver = true
@@ -140,10 +139,10 @@
 
 	// allow snake to go through walls
 	$: {
-		if (snakeHead[0] >= SQUARES_MAX) snakeHead[0] = 0
-		if (snakeHead[0] < 0) snakeHead[0] = SQUARES_MAX - 1
-		if (snakeHead[1] >= SQUARES_MAX) snakeHead[1] = 0
-		if (snakeHead[1] < 0) snakeHead[1] = SQUARES_MAX - 1
+		if ($snakeHead[0] >= SQUARES_MAX) snakeHead.update(sh => [0, sh[1]])
+		if ($snakeHead[0] < 0) snakeHead.update(sh => [SQUARES_MAX - 1, sh[1]])
+		if ($snakeHead[1] >= SQUARES_MAX) snakeHead.update(sh => [sh[0], 0])
+		if ($snakeHead[1] < 0) snakeHead.update(sh => [sh[0], SQUARES_MAX - 1])
 	}
 
 	const moveSnakeHead = () => {
@@ -153,16 +152,16 @@
 
 		switch (direction) {
 			case 'up':
-				snakeHead = [snakeHead[0] - 1, snakeHead[1]]
+				snakeHead.update(sh => [sh[0] - 1, sh[1]])
 				break
 			case 'down':
-				snakeHead = [snakeHead[0] + 1, snakeHead[1]]
+				snakeHead.update(sh => [sh[0] + 1, sh[1]])
 				break
 			case 'left':
-				snakeHead = [snakeHead[0], snakeHead[1] - 1]
+				snakeHead.update(sh => [sh[0], sh[1] - 1])
 				break
 			case 'right':
-				snakeHead = [snakeHead[0], snakeHead[1] + 1]
+				snakeHead.update(sh => [sh[0], sh[1] + 1])
 				break
 			default:
 				break
@@ -173,12 +172,12 @@
 		}
 	}
 
-	$: nextBodyPartPos = snakeHead
+	$: nextBodyPartPos = $snakeHead
 
 	// move snakeBody depending on snakeHead
 	$: snakeBody.update(sb =>
 		sb?.map(elem => {
-			snakeHead // this line is only for reactivity
+			$snakeHead // this line is only for reactivity
 			let newPos = nextBodyPartPos
 			nextBodyPartPos = elem
 			return newPos
@@ -186,7 +185,7 @@
 	)
 
 	const restart = () => {
-		snakeHead = INITIAL_SNAKE_HEAD
+		snakeHead.set(INITIAL_SNAKE_HEAD)
 		snakeBody.set(INITIAL_SNAKE_BODY)
 		direction = 'right'
 		gameOver = false
@@ -291,7 +290,7 @@
 			{/if}
 			{#each squares as square}
 				<SquareContainer>
-					{#if snakeHead[0] == square[0] && snakeHead[1] == square[1]}
+					{#if $snakeHead[0] == square[0] && $snakeHead[1] == square[1]}
 						<SnakeHead {headRotation} {growing} />
 					{:else if $snakeBody.some(box => box[0] == square[0] && box[1] == square[1])}
 						<SnakeBody {growing} />

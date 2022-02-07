@@ -245,19 +245,23 @@
 	}
 
 	const goUp = () => {
-		if (direction !== 'down') rotationQueue = [...rotationQueue, 'up']
+		if (direction === 'down' || rotationQueue.includes('up')) return
+		else rotationQueue = [...rotationQueue, 'up']
 	}
 
 	const goDown = () => {
-		if (direction !== 'up') rotationQueue = [...rotationQueue, 'down']
+		if (direction === 'up' || rotationQueue.includes('down')) return
+		else rotationQueue = [...rotationQueue, 'down']
 	}
 
 	const goLeft = () => {
-		if (direction !== 'right') rotationQueue = [...rotationQueue, 'left']
+		if (direction === 'right' || rotationQueue.includes('left')) return
+		else rotationQueue = [...rotationQueue, 'left']
 	}
 
 	const goRight = () => {
-		if (direction !== 'left') rotationQueue = [...rotationQueue, 'right']
+		if (direction === 'left' || rotationQueue.includes('right')) return
+		else rotationQueue = [...rotationQueue, 'right']
 	}
 
 	const rotateRight = () => {

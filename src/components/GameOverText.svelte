@@ -4,7 +4,7 @@
 
 <div
 	out:fade={{ duration: 400 }}
-	class="flex flex-col justify-center rounded font-serif items-center bg-black bg-opacity-70 w-[336px] absolute top-0 bottom-0 m-auto left-0 right-0 z-10"
+	class="flex flex-col justify-center rounded font-serif items-center bg-black bg-opacity-70 w-[336px] absolute top-0 bottom-0 m-auto left-0 right-0 z-30"
 >
 	<p
 		in:fade={{ delay: 100, duration: 1000 }}

@@ -238,30 +238,15 @@
 			return
 		}
 
-		if (key === 'ArrowUp' || key === 'KeyW' || key === 'KeyI') goUp()
-		else if (key === 'ArrowDown' || key === 'KeyS' || key === 'KeyK') goDown()
-		else if (key === 'ArrowLeft' || key === 'KeyA' || key === 'KeyJ') goLeft()
-		else if (key === 'ArrowRight' || key === 'KeyD' || key === 'KeyL') goRight()
+		if (key === 'ArrowUp' || key === 'KeyW' || key === 'KeyI') rotateSnake('up', 'down')
+		else if (key === 'ArrowDown' || key === 'KeyS' || key === 'KeyK') rotateSnake('down', 'up')
+		else if (key === 'ArrowLeft' || key === 'KeyA' || key === 'KeyJ') rotateSnake('left', 'right')
+		else if (key === 'ArrowRight' || key === 'KeyD' || key === 'KeyL') rotateSnake('right', 'left')
 	}
 
-	const goUp = () => {
-		if (direction === 'down' || rotationQueue.includes('up')) return
-		else rotationQueue = [...rotationQueue, 'up']
-	}
-
-	const goDown = () => {
-		if (direction === 'up' || rotationQueue.includes('down')) return
-		else rotationQueue = [...rotationQueue, 'down']
-	}
-
-	const goLeft = () => {
-		if (direction === 'right' || rotationQueue.includes('left')) return
-		else rotationQueue = [...rotationQueue, 'left']
-	}
-
-	const goRight = () => {
-		if (direction === 'left' || rotationQueue.includes('right')) return
-		else rotationQueue = [...rotationQueue, 'right']
+	const rotateSnake = (newDirection: Direction, oppositeDirection: Direction) => {
+		if (direction === oppositeDirection || rotationQueue.includes(newDirection)) return
+		else rotationQueue = [...rotationQueue, newDirection]
 	}
 
 	const rotateRight = () => {

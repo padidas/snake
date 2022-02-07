@@ -175,6 +175,10 @@
 			default:
 				break
 		}
+
+		if (growing == true) {
+			if (lastSnakeBodyPart[0] === growPos[0] && lastSnakeBodyPart[1] === growPos[1]) grow()
+		}
 	}
 
 	$: nextBodyPartPos = snakeHead

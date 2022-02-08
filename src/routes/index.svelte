@@ -109,13 +109,6 @@
 		saveNewScore()
 	}
 
-	// checking when to grow
-	$: {
-		if (growing == true) {
-			if (lastSnakeBodyPart[0] === growPos[0] && lastSnakeBodyPart[1] === growPos[1]) grow()
-		}
-	}
-
 	const grow = () => {
 		snakeBody = [...snakeBody, growPos]
 		growing = false
@@ -174,6 +167,10 @@
 				break
 			default:
 				break
+		}
+
+		if (growing == true) {
+			if (lastSnakeBodyPart[0] === growPos[0] && lastSnakeBodyPart[1] === growPos[1]) grow()
 		}
 	}
 

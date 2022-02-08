@@ -8,7 +8,7 @@
 </script>
 
 <div
-	class="relative flex w-[156px] h-11 font-semibold justify-between flex-nowrap text-sm items-center rounded-md bg-opacity-10 bg-white mb-3 px-2"
+	class="relative flex w-[156px] h-11 font-semibold justify-between flex-nowrap text-sm items-center rounded-md bg-white mb-3 px-2"
 	class:dark-gradient-highlighted={currentScoreId === no.scoreId}
 	title="🐍 {no.username} &#013;🏆 {no.score} (score) &#013;📏 {no.snakeLength} (length)"
 >

@@ -252,7 +252,12 @@
 	}
 
 	const rotateSnake = (newDirection: Direction, oppositeDirection: Direction) => {
-		if (direction === oppositeDirection || rotationQueue.includes(newDirection)) return
+		if (
+			direction === oppositeDirection ||
+			rotationQueue.includes(newDirection) ||
+			rotationQueue.includes(oppositeDirection)
+		)
+			return
 		else rotationQueue = [...rotationQueue, newDirection]
 	}
 

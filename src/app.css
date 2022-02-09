@@ -4,10 +4,11 @@
 
 body {
 	background-color: #001218;
-	background-image: url('/assets/forest.png');
+	background-image: url('/assets/schraeg.png');
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-position-x: center;
+	background-size: auto;
 }
 
 @media only screen and (min-width: 768px) {
@@ -17,19 +18,23 @@ body {
 }
 
 @layer components {
+	.background-gradient {
+		@apply bg-rose-100;
+	}
+
 	.dark-gradient {
-		@apply bg-gradient-to-br from-sky-700 to-sky-900;
+		@apply bg-white;
 	}
 
 	.dark-gradient-highlighted {
-		@apply bg-gradient-to-br from-yellow-500 to-sky-700;
+		@apply bg-white;
 	}
 
 	.snake-color {
-		@apply bg-lime-600;
+		@apply bg-emerald-400;
 	}
 
 	.growing {
-		@apply bg-lime-400;
+		@apply bg-emerald-300;
 	}
 }

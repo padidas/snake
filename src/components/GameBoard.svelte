@@ -6,7 +6,7 @@
 
 <style>
 	.gameboard-bg {
-		background-image: url('/assets/gameboard.png');
+		background-image: url('/assets/white_gameboard.png');
 		background-repeat: no-repeat;
 		background-position-x: center;
 	}

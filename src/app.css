@@ -4,7 +4,7 @@
 
 body {
 	background-color: #001218;
-	background-image: url('/assets/rosablue.png');
+	background-image: url('/assets/schraeg.png');
 	background-attachment: fixed;
 	background-repeat: no-repeat;
 	background-position-x: center;
@@ -18,8 +18,12 @@ body {
 }
 
 @layer components {
+	.background-gradient {
+		@apply bg-rose-100;
+	}
+
 	.dark-gradient {
-		@apply bg-gradient-to-br from-rose-50 to-teal-50;
+		@apply bg-white;
 	}
 
 	.dark-gradient-highlighted {
@@ -27,10 +31,10 @@ body {
 	}
 
 	.snake-color {
-		@apply bg-emerald-300;
+		@apply bg-emerald-400;
 	}
 
 	.growing {
-		@apply bg-emerald-400;
+		@apply bg-emerald-300;
 	}
 }

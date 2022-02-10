@@ -18,6 +18,7 @@
 	import SnakeLengthInfo from '../components/SnakeLengthInfo.svelte'
 	import ActivePlayers from '../components/ActivePlayers.svelte'
 	import axios from 'axios'
+	import Bowser from 'bowser'
 
 	// states //
 	let squares: Array<Square> = []
@@ -33,7 +34,6 @@
 	let scores: Score[] = []
 	let activeScores: Score[] = []
 	let currentScoreId: string = ObjectId().toHexString()
-	let highscore: Score
 	let nextBodyPartPos: Square
 	let snakeBodyWithoutFirst: Square[]
 	let lastSnakeBodyPart: Square
@@ -50,7 +50,6 @@
 	const INITIAL_SNAKE_HEAD: Square = [4, 3]
 	const INITIAL_SNAKE_BODY: Square[] = [[4, 2]]
 	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
-	const SNAKE_SPEED_IN_MS = 100
 	const GET_SCORES_INTERVAL_IN_MS = 3000
 
 	// initialization //
@@ -81,17 +80,14 @@
 		}))
 	}
 
-	$: if (scores.length > 0)
-		highscore = scores.reduce((a, b) => {
-			if (a.score > b.score) return a
-			else return b
-		})
-
 	onMount(async () => {
 		getScores()
 		setInterval(getScores, GET_SCORES_INTERVAL_IN_MS)
-		setInterval(moveSnakeHead, SNAKE_SPEED_IN_MS)
+		setInterval(moveSnakeHead, SNAKE_SPEED_DEPENDING_ON_BROWSER())
 	})
+
+	const SNAKE_SPEED_DEPENDING_ON_BROWSER = () =>
+		Bowser.getParser(window.navigator.userAgent).getEngineName() == 'Gecko' ? 94 : 100
 
 	const getScores = async () => {
 		fetchTopScores()

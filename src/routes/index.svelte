@@ -19,6 +19,8 @@
 	import ActivePlayers from '../components/ActivePlayers.svelte'
 	import axios from 'axios'
 	import Bowser from 'bowser'
+	import TouchControl from '../components/TouchControl.svelte'
+	import ButtonControl from '../components/ButtonControl.svelte'
 
 	// states //
 	let squares: Array<Square> = []
@@ -44,6 +46,7 @@
 	let avocado = '/assets/avocado.svg'
 	let appleOrBanana = 0
 	let rotationQueue: Direction[] = []
+	let shouldUseSwipeControl: boolean = false
 
 	// constants //
 	const SQUARES_MAX = 14
@@ -190,6 +193,8 @@
 		growing = false
 	}
 
+	const toggleControlMode = () => (shouldUseSwipeControl = !shouldUseSwipeControl)
+
 	const saveNewScore = async () => {
 		console.log('SAVE NEW SCORE')
 		await axios.post(`${BACKEND_URL}/scores`, {
@@ -254,19 +259,19 @@
 		else rotationQueue = [...rotationQueue, newDirection]
 	}
 
-	const rotateRight = () => {
-		if (direction === 'left') direction = 'up'
-		else if (direction === 'up') direction = 'right'
-		else if (direction === 'right') direction = 'down'
-		else if (direction === 'down') direction = 'left'
-	}
+	// const rotateRight = () => {
+	// 	if (direction === 'left') direction = 'up'
+	// 	else if (direction === 'up') direction = 'right'
+	// 	else if (direction === 'right') direction = 'down'
+	// 	else if (direction === 'down') direction = 'left'
+	// }
 
-	const rotateLeft = () => {
-		if (direction === 'left') direction = 'down'
-		else if (direction === 'down') direction = 'right'
-		else if (direction === 'right') direction = 'up'
-		else if (direction === 'up') direction = 'left'
-	}
+	// const rotateLeft = () => {
+	// 	if (direction === 'left') direction = 'down'
+	// 	else if (direction === 'down') direction = 'right'
+	// 	else if (direction === 'right') direction = 'up'
+	// 	else if (direction === 'up') direction = 'left'
+	// }
 </script>
 
 <svelte:window on:keydown|={handleKeydown} />
@@ -300,15 +305,25 @@
 				</SquareContainer>
 			{/each}
 		</GameBoard>
-		<div class="flex w-[336px] h-[40px] justify-between items-center">
+		<div class="flex w-[336px] h-[40px] justify-between text-sm font-semibold items-center">
+			<button
+				on:click={toggleControlMode}
+				class="w-[100px] h-[24px] rounded-full dark-gradient border-2 font-bold text-xs shadow flex justify-center items-center z-10 bg-white hover:bg-slate-100 active:bg-slate-200 focus:outline-none active:ring active:ring-slate-400"
+				>{#if shouldUseSwipeControl}
+					USE BUTTONS
+				{:else}
+					USE SWIPE
+				{/if}</button
+			>
 			<SnakeLengthInfo snakeLengthInfo={snakeBody.length} />
 			<RestartButton {restart} />
 		</div>
 	</SubContainer>
-	<div class="flex w-[336px] h-16 justify-between md:hidden">
-		<Controls controlFunction={rotateLeft} label={'turn left'} />
-		<Controls controlFunction={rotateRight} label={'turn right'} />
-	</div>
+	{#if shouldUseSwipeControl}
+		<TouchControl {rotateSnake} />
+	{:else}
+		<ButtonControl {rotateSnake} />
+	{/if}
 	<SubContainer>
 		<ScoreBoard {scores} {currentScoreId} />
 	</SubContainer>

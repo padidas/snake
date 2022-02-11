@@ -7,7 +7,7 @@
 	export let score: number
 
 	onMount(() => {
-		username.set(window.localStorage.storedUsername)
+		username.set(window.localStorage.storedUsername ?? '')
 		username.subscribe(un => (window.localStorage.storedUsername = un))
 	})
 </script>

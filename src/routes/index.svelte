@@ -7,7 +7,6 @@
 	import SquareContainer from '../components/SquareContainer.svelte'
 	import SubContainer from '../components/Layout/SubContainer.svelte'
 	import GameContainer from '../components/Layout/GameContainer.svelte'
-	import Controls from '../components/Controls.svelte'
 	import GameBoard from '../components/GameBoard.svelte'
 	import ScoreBoard from '../components/ScoreBoard.svelte'
 	import { onMount } from 'svelte'
@@ -34,7 +33,6 @@
 	let growPos: Square
 	let score = 0
 	let scores: Score[] = []
-	let activeScores: Score[] = []
 	let currentScoreId: string = ObjectId().toHexString()
 	let nextBodyPartPos: Square
 	let snakeBodyWithoutFirst: Square[]
@@ -53,7 +51,7 @@
 	const INITIAL_SNAKE_HEAD: Square = [4, 3]
 	const INITIAL_SNAKE_BODY: Square[] = [[4, 2]]
 	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
-	const GET_SCORES_INTERVAL_IN_MS = 3000
+	const GET_SCORES_INTERVAL_IN_MS = +import.meta.env.VITE_GET_SCORES_INTERVAL_IN_MS
 
 	// initialization //
 	snakeHead = INITIAL_SNAKE_HEAD
@@ -72,30 +70,13 @@
 		}))
 	}
 
-	const fetchActiveScores = async (): Promise<void> => {
-		console.log('fetchActiveScores')
-		const res = await axios.get(`${BACKEND_URL}/scores/activeScores`)
-		activeScores = res.data.map(elem => ({
-			username: elem.username,
-			score: elem.score,
-			scoreId: elem.id,
-			snakeLength: elem.snakeLength,
-		}))
-	}
-
 	onMount(async () => {
-		getScores()
-		setInterval(getScores, GET_SCORES_INTERVAL_IN_MS)
+		setInterval(fetchTopScores, GET_SCORES_INTERVAL_IN_MS)
 		setInterval(moveSnakeHead, SNAKE_SPEED_DEPENDING_ON_BROWSER())
 	})
 
 	const SNAKE_SPEED_DEPENDING_ON_BROWSER = () =>
 		Bowser.getParser(window.navigator.userAgent).getEngineName() == 'Gecko' ? 94 : 100
-
-	const getScores = async () => {
-		fetchTopScores()
-		fetchActiveScores()
-	}
 
 	$: lastSnakeBodyPart = snakeBody[snakeBody.length - 1]
 
@@ -203,7 +184,7 @@
 			score: score,
 			snakeLength: snakeBody.length,
 		})
-		getScores()
+		fetchTopScores()
 	}
 
 	// snakeHead rotation
@@ -328,6 +309,6 @@
 		<ScoreBoard {scores} {currentScoreId} />
 	</SubContainer>
 	<SubContainer>
-		<ActivePlayers {activeScores} />
+		<ActivePlayers />
 	</SubContainer>
 </GameContainer>

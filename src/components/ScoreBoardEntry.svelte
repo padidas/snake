@@ -4,8 +4,8 @@
 
 	export let no: Score
 	export let i: number
-	export let currentScoreId: string = ''
-	export let activePlayers: boolean = false
+	export let currentScoreId: string | undefined = ''
+	export let activePlayers: boolean | undefined = false
 </script>
 
 <div

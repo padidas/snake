@@ -308,7 +308,7 @@
 	<SubContainer>
 		<ScoreBoard {scores} {currentScoreId} />
 	</SubContainer>
-	<SubContainer>
+	<!-- <SubContainer>
 		<ActivePlayers />
-	</SubContainer>
+	</SubContainer> -->
 </GameContainer>

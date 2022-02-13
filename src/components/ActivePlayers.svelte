@@ -10,11 +10,6 @@
 
 	let activeScores: Score[] = []
 
-	onMount(() => {
-		privateMode.set(JSON.parse(window.localStorage.storedPrivateMode) ?? false)
-		privateMode.subscribe(pm => (window.localStorage.storedPrivateMode = pm))
-	})
-
 	const fetchActiveScores = async (): Promise<void> => {
 		console.log('fetchActiveScores')
 		const res = await axios.get(`${BACKEND_URL}/scores/activeScores`)
@@ -28,6 +23,8 @@
 	}
 
 	onMount(async () => {
+		privateMode.set(JSON.parse(window.localStorage.storedPrivateMode) ?? false)
+		privateMode.subscribe(pm => (window.localStorage.storedPrivateMode = pm))
 		setInterval(fetchActiveScores, GET_SCORES_INTERVAL_IN_MS)
 	})
 </script>

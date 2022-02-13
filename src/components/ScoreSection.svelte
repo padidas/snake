@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-
 	import { username } from '../stores'
 	import ScoreBubble from './ScoreBubble.svelte'
 

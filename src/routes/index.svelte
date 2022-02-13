@@ -12,7 +12,7 @@
 	import { onMount } from 'svelte'
 	import type { Direction, HeadRotation, Square, Score } from '../model/Types'
 	import ObjectId from 'bson-objectid'
-	import { username } from '../stores'
+	import { privateMode, username } from '../stores'
 	import GameOverText from '../components/GameOverText.svelte'
 	import SnakeLengthInfo from '../components/SnakeLengthInfo.svelte'
 	import ActivePlayers from '../components/ActivePlayers.svelte'
@@ -63,9 +63,9 @@
 		console.log('fetchTopScores')
 		const res = await axios.get(`${BACKEND_URL}/scores/topScores`)
 		scores = res.data.map(elem => ({
+			scoreId: elem.id,
 			username: elem.username,
 			score: elem.score,
-			scoreId: elem.id,
 			snakeLength: elem.snakeLength,
 		}))
 	}
@@ -183,6 +183,7 @@
 			username: $username,
 			score: score,
 			snakeLength: snakeBody.length,
+			privateMode: $privateMode,
 		})
 		fetchTopScores()
 	}
@@ -308,7 +309,7 @@
 	<SubContainer>
 		<ScoreBoard {scores} {currentScoreId} />
 	</SubContainer>
-	<!-- <SubContainer>
+	<SubContainer>
 		<ActivePlayers />
-	</SubContainer> -->
+	</SubContainer>
 </GameContainer>

@@ -1,4 +1,10 @@
 <script lang="ts">
+	import {
+		postCurrentScore,
+		currentScore,
+		incrementCurrentScore,
+		resetCurrentScore,
+	} from '../stores/ScoreStore'
 	import GameBoardTile from '../components/GameBoardTile.svelte'
 	import RestartButton from '../components/RestartButton.svelte'
 	import ScoreSection from '../components/ScoreSection.svelte'
@@ -10,17 +16,14 @@
 	import GameBoard from '../components/GameBoard.svelte'
 	import ScoreBoard from '../components/ScoreBoard.svelte'
 	import { onMount } from 'svelte'
-	import type { Direction, HeadRotation, Square, Score } from '../model/Types'
+	import type { Direction, HeadRotation, Square } from '../model/Types'
 	import ObjectId from 'bson-objectid'
-	import { privateMode, username } from '../stores'
 	import GameOverText from '../components/GameOverText.svelte'
 	import SnakeLengthInfo from '../components/SnakeLengthInfo.svelte'
 	import ActivePlayers from '../components/ActivePlayers.svelte'
-	import axios from 'axios'
 	import Bowser from 'bowser'
 	import TouchControl from '../components/TouchControl.svelte'
 	import ButtonControl from '../components/ButtonControl.svelte'
-	import { postCurrentScore } from '../stores/ScoreStore'
 
 	// states //
 	let squares: Array<Square> = []
@@ -32,7 +35,6 @@
 	let growing: boolean = false
 	let lastFoodPos: Square
 	let growPos: Square
-	let score = 0
 	let currentScoreId: string = ObjectId().toHexString()
 	let nextBodyPartPos: Square
 	let snakeBodyWithoutFirst: Square[]
@@ -50,7 +52,6 @@
 	const SQUARES_MAX = 14
 	const INITIAL_SNAKE_HEAD: Square = [4, 3]
 	const INITIAL_SNAKE_BODY: Square[] = [[4, 2]]
-	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
 	// initialization //
 	snakeHead = INITIAL_SNAKE_HEAD
@@ -69,12 +70,14 @@
 
 	// eating
 	$: if (food[0] == snakeHead[0] && food[1] == snakeHead[1]) {
-		score = score + 1
+		incrementCurrentScore()
 		growPos = food
 		resetFood()
 		growing = true
 		saveCurrentScore()
 	}
+
+	const saveCurrentScore = () => postCurrentScore(currentScoreId, snakeBody.length)
 
 	const grow = () => {
 		snakeBody = [...snakeBody, growPos]
@@ -156,23 +159,12 @@
 		snakeBody = INITIAL_SNAKE_BODY
 		direction = 'right'
 		gameOver = false
-		score = 0
+		resetCurrentScore()
 		currentScoreId = ObjectId().toHexString()
 		growing = false
 	}
 
 	const toggleControlMode = () => (shouldUseSwipeControl = !shouldUseSwipeControl)
-
-	const saveCurrentScore = () => {
-		const currentScore: Score = {
-			scoreId: currentScoreId,
-			username: $username,
-			score: score,
-			snakeLength: snakeBody.length,
-			privateMode: $privateMode,
-		}
-		postCurrentScore(currentScore)
-	}
 
 	// snakeHead rotation
 	$: switch (direction) {
@@ -246,7 +238,7 @@
 
 <GameContainer>
 	<SubContainer>
-		<ScoreSection {score} />
+		<ScoreSection />
 		<GameBoard>
 			{#if gameOver}
 				<GameOverText />

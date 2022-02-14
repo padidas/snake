@@ -1,10 +1,16 @@
+import { username, privateMode } from '../stores'
+import { writable, get } from 'svelte/store'
 import axios from 'axios'
 import type { Score } from 'src/model/Types'
-import { writable } from 'svelte/store'
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
 export const activeScores = writable<Score[]>([])
 export const topScores = writable<Score[]>([])
+export const currentScore = writable<number>(0)
+
+export const incrementCurrentScore = (): void => currentScore.update(cs => cs + 1)
+export const resetCurrentScore = (): void => currentScore.set(0)
 
 export const fetchTopScores = async (): Promise<void> => {
 	console.log('fetchTopScores')
@@ -33,8 +39,18 @@ export const fetchActiveScores = async (): Promise<void> => {
 	)
 }
 
-export const postCurrentScore = async (currentScore: Score): Promise<void> => {
+export const postCurrentScore = async (
+	currentScoreId: string,
+	snakeLength: number,
+): Promise<void> => {
 	console.log('SAVE NEW SCORE')
-	await axios.post(`${BACKEND_URL}/scores`, currentScore)
+	const composedScore: Score = {
+		scoreId: currentScoreId,
+		username: get(username),
+		score: get(currentScore),
+		snakeLength: snakeLength,
+		privateMode: get(privateMode),
+	}
+	await axios.post(`${BACKEND_URL}/scores`, composedScore)
 	fetchTopScores()
 }

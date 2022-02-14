@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
+	import { currentScore } from '../stores/ScoreStore'
 	import { username } from '../stores'
+	import { onMount } from 'svelte'
 	import ScoreBubble from './ScoreBubble.svelte'
-
-	export let score: number
 
 	onMount(() => {
 		username.set(window.localStorage.storedUsername ?? '')
@@ -18,5 +17,5 @@
 		bind:value={$username}
 		on:keydown|stopPropagation
 	/>
-	<ScoreBubble {score} />
+	<ScoreBubble score={$currentScore} />
 </div>

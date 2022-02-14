@@ -1,26 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import type { Score } from '../model/Types'
 	import ScoreBoardEntry from './ScoreBoardEntry.svelte'
-	import axios from 'axios'
 	import { privateMode } from '../stores'
+	import { fetchActiveScores, activeScores } from '../stores/ScoreStore'
 
-	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 	const GET_SCORES_INTERVAL_IN_MS = +import.meta.env.VITE_GET_SCORES_INTERVAL_IN_MS
-
-	let activeScores: Score[] = []
-
-	const fetchActiveScores = async (): Promise<void> => {
-		console.log('fetchActiveScores')
-		const res = await axios.get(`${BACKEND_URL}/scores/activeScores`)
-		activeScores = res.data.map(elem => ({
-			scoreId: elem.id,
-			username: elem.username,
-			score: elem.score,
-			snakeLength: elem.snakeLength,
-			privateMode: elem.privateMode ?? false,
-		}))
-	}
 
 	onMount(async () => {
 		privateMode.set(JSON.parse(window.localStorage.storedPrivateMode ?? false))
@@ -43,7 +27,7 @@
 				Deactivate private&nbsp;mode to see if someone else is playing.
 			</div>
 		{:else}
-			{#each activeScores as activeScore, i}
+			{#each $activeScores as activeScore, i}
 				<ScoreBoardEntry no={activeScore} {i} activePlayers={true} />
 			{/each}
 		{/if}

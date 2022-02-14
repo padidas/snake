@@ -20,6 +20,7 @@
 	import Bowser from 'bowser'
 	import TouchControl from '../components/TouchControl.svelte'
 	import ButtonControl from '../components/ButtonControl.svelte'
+	import { postCurrentScore } from '../stores/ScoreStore'
 
 	// states //
 	let squares: Array<Square> = []
@@ -32,7 +33,6 @@
 	let lastFoodPos: Square
 	let growPos: Square
 	let score = 0
-	let scores: Score[] = []
 	let currentScoreId: string = ObjectId().toHexString()
 	let nextBodyPartPos: Square
 	let snakeBodyWithoutFirst: Square[]
@@ -51,7 +51,6 @@
 	const INITIAL_SNAKE_HEAD: Square = [4, 3]
 	const INITIAL_SNAKE_BODY: Square[] = [[4, 2]]
 	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
-	const GET_SCORES_INTERVAL_IN_MS = +import.meta.env.VITE_GET_SCORES_INTERVAL_IN_MS
 
 	// initialization //
 	snakeHead = INITIAL_SNAKE_HEAD
@@ -59,19 +58,7 @@
 	nextBodyPartPos = snakeHead
 	food = [8, 6]
 
-	const fetchTopScores = async (): Promise<void> => {
-		console.log('fetchTopScores')
-		const res = await axios.get(`${BACKEND_URL}/scores/topScores`)
-		scores = res.data.map(elem => ({
-			scoreId: elem.id,
-			username: elem.username,
-			score: elem.score,
-			snakeLength: elem.snakeLength,
-		}))
-	}
-
-	onMount(async () => {
-		setInterval(fetchTopScores, GET_SCORES_INTERVAL_IN_MS)
+	onMount(() => {
 		setInterval(moveSnakeHead, SNAKE_SPEED_DEPENDING_ON_BROWSER())
 	})
 
@@ -86,7 +73,7 @@
 		growPos = food
 		resetFood()
 		growing = true
-		saveNewScore()
+		saveCurrentScore()
 	}
 
 	const grow = () => {
@@ -176,16 +163,15 @@
 
 	const toggleControlMode = () => (shouldUseSwipeControl = !shouldUseSwipeControl)
 
-	const saveNewScore = async () => {
-		console.log('SAVE NEW SCORE')
-		await axios.post(`${BACKEND_URL}/scores`, {
+	const saveCurrentScore = () => {
+		const currentScore: Score = {
 			scoreId: currentScoreId,
 			username: $username,
 			score: score,
 			snakeLength: snakeBody.length,
 			privateMode: $privateMode,
-		})
-		fetchTopScores()
+		}
+		postCurrentScore(currentScore)
 	}
 
 	// snakeHead rotation
@@ -307,7 +293,7 @@
 		<ButtonControl {rotateSnake} />
 	{/if}
 	<SubContainer>
-		<ScoreBoard {scores} {currentScoreId} />
+		<ScoreBoard {currentScoreId} />
 	</SubContainer>
 	<SubContainer>
 		<ActivePlayers />

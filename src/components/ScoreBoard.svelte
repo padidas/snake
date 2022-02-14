@@ -1,9 +1,15 @@
 <script lang="ts">
-	import type { Score } from '../model/Types'
 	import ScoreBoardEntry from './ScoreBoardEntry.svelte'
+	import { topScores, fetchTopScores } from '../stores/ScoreStore'
+	import { onMount } from 'svelte'
+	const GET_SCORES_INTERVAL_IN_MS = +import.meta.env.VITE_GET_SCORES_INTERVAL_IN_MS
 
-	export let scores: Score[] = []
 	export let currentScoreId: string = ''
+
+	onMount(async () => {
+		fetchTopScores()
+		setInterval(fetchTopScores, GET_SCORES_INTERVAL_IN_MS)
+	})
 </script>
 
 <div class="w-[344px] h-[336px] flex flex-col dark-gradient shadow-lg rounded mb-4 md:mb-0">
@@ -11,7 +17,7 @@
 		<div>Top 10</div>
 	</div>
 	<div class="flex flex-col flex-wrap h-[300px] items-center">
-		{#each scores as no, i}
+		{#each $topScores as no, i}
 			<ScoreBoardEntry {no} {i} {currentScoreId} />
 		{/each}
 	</div>

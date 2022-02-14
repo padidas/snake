@@ -28,7 +28,7 @@
 			</div>
 		{:else}
 			{#each $activeScores as activeScore, i}
-				<ScoreBoardEntry no={activeScore} {i} activePlayers={true} />
+				<ScoreBoardEntry score={activeScore} {i} activePlayers={true} />
 			{/each}
 		{/if}
 	</div>

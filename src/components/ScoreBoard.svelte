@@ -15,8 +15,8 @@
 		<div>Top 10</div>
 	</div>
 	<div class="flex flex-col flex-wrap h-[300px] items-center">
-		{#each $topScores as no, i}
-			<ScoreBoardEntry {no} {i} currentScoreId={$currentScoreId} />
+		{#each $topScores as score, i}
+			<ScoreBoardEntry {score} {i} currentScoreId={$currentScoreId} />
 		{/each}
 	</div>
 </div>

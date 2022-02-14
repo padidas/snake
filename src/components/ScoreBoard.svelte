@@ -1,10 +1,8 @@
 <script lang="ts">
 	import ScoreBoardEntry from './ScoreBoardEntry.svelte'
-	import { topScores, fetchTopScores } from '../stores/ScoreStore'
+	import { topScores, fetchTopScores, currentScoreId } from '../stores/ScoreStore'
 	import { onMount } from 'svelte'
 	const GET_SCORES_INTERVAL_IN_MS = +import.meta.env.VITE_GET_SCORES_INTERVAL_IN_MS
-
-	export let currentScoreId: string = ''
 
 	onMount(async () => {
 		fetchTopScores()
@@ -18,7 +16,7 @@
 	</div>
 	<div class="flex flex-col flex-wrap h-[300px] items-center">
 		{#each $topScores as no, i}
-			<ScoreBoardEntry {no} {i} {currentScoreId} />
+			<ScoreBoardEntry {no} {i} currentScoreId={$currentScoreId} />
 		{/each}
 	</div>
 </div>

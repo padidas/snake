@@ -1,9 +1,9 @@
 <script lang="ts">
 	import {
 		postCurrentScore,
-		currentScore,
 		incrementCurrentScore,
 		resetCurrentScore,
+		resetCurrentScoreId,
 	} from '../stores/ScoreStore'
 	import GameBoardTile from '../components/GameBoardTile.svelte'
 	import RestartButton from '../components/RestartButton.svelte'
@@ -35,7 +35,6 @@
 	let growing: boolean = false
 	let lastFoodPos: Square
 	let growPos: Square
-	let currentScoreId: string = ObjectId().toHexString()
 	let nextBodyPartPos: Square
 	let snakeBodyWithoutFirst: Square[]
 	let lastSnakeBodyPart: Square
@@ -77,7 +76,7 @@
 		saveCurrentScore()
 	}
 
-	const saveCurrentScore = () => postCurrentScore(currentScoreId, snakeBody.length)
+	const saveCurrentScore = () => postCurrentScore(snakeBody.length)
 
 	const grow = () => {
 		snakeBody = [...snakeBody, growPos]
@@ -160,7 +159,7 @@
 		direction = 'right'
 		gameOver = false
 		resetCurrentScore()
-		currentScoreId = ObjectId().toHexString()
+		resetCurrentScoreId()
 		growing = false
 	}
 
@@ -285,7 +284,7 @@
 		<ButtonControl {rotateSnake} />
 	{/if}
 	<SubContainer>
-		<ScoreBoard {currentScoreId} />
+		<ScoreBoard />
 	</SubContainer>
 	<SubContainer>
 		<ActivePlayers />

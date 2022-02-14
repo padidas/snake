@@ -23,7 +23,7 @@
 	}
 
 	onMount(async () => {
-		privateMode.set(JSON.parse(window.localStorage.storedPrivateMode) ?? false)
+		privateMode.set(JSON.parse(window.localStorage.storedPrivateMode ?? false))
 		privateMode.subscribe(pm => (window.localStorage.storedPrivateMode = pm))
 		setInterval(fetchActiveScores, GET_SCORES_INTERVAL_IN_MS)
 	})

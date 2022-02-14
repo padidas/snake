@@ -4,6 +4,7 @@
 		incrementCurrentScore,
 		resetCurrentScore,
 		resetCurrentScoreId,
+		snakeLength,
 	} from '../stores/ScoreStore'
 	import GameBoardTile from '../components/GameBoardTile.svelte'
 	import RestartButton from '../components/RestartButton.svelte'
@@ -73,10 +74,8 @@
 		growPos = food
 		resetFood()
 		growing = true
-		saveCurrentScore()
+		postCurrentScore()
 	}
-
-	const saveCurrentScore = () => postCurrentScore(snakeBody.length)
 
 	const grow = () => {
 		snakeBody = [...snakeBody, growPos]
@@ -99,6 +98,8 @@
 		}
 	}
 	initGameBoard()
+
+	$: snakeLength.set(snakeBody.length)
 
 	$: snakeBodyWithoutFirst = snakeBody.filter((_, i) => i !== 0)
 
@@ -191,7 +192,7 @@
 		}
 	}
 
-	// controlls & key events
+	// controls & key events
 	const handleKeydown = e => {
 		const key = e.code
 		if (key === 'ArrowDown' || key === 'ArrowUp' || key === 'ArrowLeft' || key === 'ArrowRight')
@@ -274,7 +275,7 @@
 					USE SWIPE
 				{/if}</button
 			>
-			<SnakeLengthInfo snakeLengthInfo={snakeBody.length} />
+			<SnakeLengthInfo />
 			<RestartButton {restart} />
 		</div>
 	</SubContainer>

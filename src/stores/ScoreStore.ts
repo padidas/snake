@@ -10,6 +10,7 @@ export const activeScores = writable<Score[]>([])
 export const topScores = writable<Score[]>([])
 export const currentScore = writable<number>(0)
 export const currentScoreId = writable<string>(ObjectID().toHexString())
+export const snakeLength = writable<number>(0)
 
 export const incrementCurrentScore = (): void => currentScore.update(cs => cs + 1)
 export const resetCurrentScore = (): void => currentScore.set(0)
@@ -42,13 +43,13 @@ export const fetchActiveScores = async (): Promise<void> => {
 	)
 }
 
-export const postCurrentScore = async (snakeLength: number): Promise<void> => {
+export const postCurrentScore = async (): Promise<void> => {
 	console.log('SAVE NEW SCORE')
 	const composedScore: Score = {
 		scoreId: get(currentScoreId),
 		username: get(username),
 		score: get(currentScore),
-		snakeLength: snakeLength,
+		snakeLength: get(snakeLength),
 		privateMode: get(privateMode),
 	}
 	await axios.post(`${BACKEND_URL}/scores`, composedScore)

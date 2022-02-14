@@ -1,7 +1,7 @@
 <script lang="ts">
-	export let snakeLengthInfo = 0
+	import { snakeLength } from '../stores/ScoreStore'
 </script>
 
 <div>
-	Snake Length: {snakeLengthInfo}
+	Snake Length: {$snakeLength}
 </div>

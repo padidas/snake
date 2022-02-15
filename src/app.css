@@ -27,7 +27,7 @@ body {
 	}
 
 	.dark-gradient-highlighted {
-		@apply bg-white;
+		@apply bg-gradient-to-r from-emerald-100 to-white;
 	}
 
 	.snake-color {

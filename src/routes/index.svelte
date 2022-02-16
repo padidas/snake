@@ -15,16 +15,15 @@
 	import SubContainer from '../components/Layout/SubContainer.svelte'
 	import GameContainer from '../components/Layout/GameContainer.svelte'
 	import GameBoard from '../components/GameBoard.svelte'
-	import ScoreBoard from '../components/ScoreBoard.svelte'
 	import { onMount } from 'svelte'
 	import type { Direction, HeadRotation, Square } from '../model/Types'
-	import ObjectId from 'bson-objectid'
 	import GameOverText from '../components/GameOverText.svelte'
 	import SnakeLengthInfo from '../components/SnakeLengthInfo.svelte'
 	import ActivePlayers from '../components/ActivePlayers.svelte'
 	import Bowser from 'bowser'
 	import TouchControl from '../components/TouchControl.svelte'
 	import ButtonControl from '../components/ButtonControl.svelte'
+	import TopPlayersBoard from '../components/TopPlayersBoard.svelte'
 
 	// states //
 	let squares: Array<Square> = []
@@ -285,7 +284,7 @@
 		<ButtonControl {rotateSnake} />
 	{/if}
 	<SubContainer>
-		<ScoreBoard />
+		<TopPlayersBoard />
 	</SubContainer>
 	<SubContainer>
 		<ActivePlayers />

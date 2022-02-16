@@ -1,8 +1,8 @@
 <script lang="ts">
+	import { fetchActiveScores, activeScores, currentScoreId } from '../stores/ScoreStore'
+	import { privateMode } from '../stores'
 	import { onMount } from 'svelte'
 	import ScoreBoardEntry from './ScoreBoardEntry.svelte'
-	import { privateMode } from '../stores'
-	import { fetchActiveScores, activeScores } from '../stores/ScoreStore'
 
 	const GET_SCORES_INTERVAL_IN_MS = +import.meta.env.VITE_GET_SCORES_INTERVAL_IN_MS
 
@@ -28,7 +28,12 @@
 			</div>
 		{:else}
 			{#each $activeScores as activeScore, i}
-				<ScoreBoardEntry score={activeScore} {i} activePlayers={true} />
+				<ScoreBoardEntry
+					score={activeScore}
+					{i}
+					activePlayers={true}
+					currentScoreId={$currentScoreId}
+				/>
 			{/each}
 		{/if}
 	</div>

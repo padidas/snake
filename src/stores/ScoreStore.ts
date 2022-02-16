@@ -8,6 +8,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
 export const activeScores = writable<Score[]>([])
 export const topScores = writable<Score[]>([])
+export const topPlayers = writable<Score[]>([])
 export const currentScore = writable<number>(0)
 export const currentScoreId = writable<string>(ObjectID().toHexString())
 export const snakeLength = writable<number>(0)
@@ -20,6 +21,19 @@ export const fetchTopScores = async (): Promise<void> => {
 	console.log('fetchTopScores')
 	const res = await axios.get(`${BACKEND_URL}/scores/topScores`)
 	topScores.set(
+		res.data.map(elem => ({
+			scoreId: elem.id,
+			username: elem.username,
+			score: elem.score,
+			snakeLength: elem.snakeLength,
+		})),
+	)
+}
+
+export const fetchTopPlayers = async (): Promise<void> => {
+	console.log('fetchTopPlayers')
+	const res = await axios.get(`${BACKEND_URL}/scores/topPlayers`)
+	topPlayers.set(
 		res.data.map(elem => ({
 			scoreId: elem.id,
 			username: elem.username,

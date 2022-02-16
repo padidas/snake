@@ -11,7 +11,7 @@
 <div
 	class="relative flex w-[156px] h-11 font-semibold justify-between flex-nowrap text-sm items-center rounded-md mb-3 px-2 shadow-md"
 	class:bg-white={currentScoreId !== score.scoreId}
-	class:dark-gradient-highlighted={currentScoreId === score.scoreId}
+	class:dark-gradient-highlighted={currentScoreId.toLowerCase() === score.scoreId}
 	title="🐍 {score.username} &#013;🏆 {score.score} (score) &#013;📏 {score.snakeLength} (length)"
 >
 	{#if i === 0 && !activePlayers}

@@ -17,13 +17,16 @@
 	{#if i === 0 && !activePlayers}
 		<img src="/assets/crown.png" alt="a crown" class="absolute -top-3 -left-3 -rotate-12 h-8" />
 	{/if}
-	<div class="flex flex-1 min-w-0">
+	<div class="flex flex-1 min-w-0 items-center">
 		{#if !activePlayers}
 			<div class="mr-1">
 				{i + 1 + '.'}
 			</div>
 		{/if}
-		<p class="text-ellipsis overflow-hidden whitespace-nowrap z-10 font-bold">
+		<p
+			class="text-ellipsis overflow-hidden whitespace-nowrap z-10 font-bold"
+			class:text-xs={score.username.length >= 12}
+		>
 			{score.username}
 		</p>
 	</div>

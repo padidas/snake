@@ -1,6 +1,6 @@
 import type { Square } from '../model/Types'
 import { get, writable } from 'svelte/store'
-import { SQUARES_MAX } from 'src/model/Constants'
+import { SQUARES_MAX } from '../model/Constants'
 
 export const fruitIcons = ['/assets/apple.svg', '/assets/banana.svg', '/assets/avocado.svg']
 const INITIAL_FOOD_POSITION: Square = [8, 6]

@@ -1,7 +1,7 @@
 import { username, privateMode } from '../stores'
 import { writable, get } from 'svelte/store'
 import axios from 'axios'
-import type { Score } from 'src/model/Types'
+import type { Score } from '../model/Types'
 import ObjectID from 'bson-objectid'
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL

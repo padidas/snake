@@ -6,6 +6,7 @@
 		resetCurrentScoreId,
 		snakeLength,
 	} from '../stores/ScoreStore'
+	import { fruitIcons, appleOrBanana, food, resetFood } from '../stores/FoodStore'
 	import GameBoardTile from '../components/GameBoardTile.svelte'
 	import RestartButton from '../components/RestartButton.svelte'
 	import ScoreSection from '../components/ScoreSection.svelte'
@@ -16,7 +17,6 @@
 	import GameContainer from '../components/Layout/GameContainer.svelte'
 	import GameBoard from '../components/GameBoard.svelte'
 	import { onMount } from 'svelte'
-	import type { Direction, HeadRotation, Square } from '../model/Types'
 	import GameOverText from '../components/GameOverText.svelte'
 	import SnakeLengthInfo from '../components/SnakeLengthInfo.svelte'
 	import ActivePlayers from '../components/ActivePlayers.svelte'
@@ -24,26 +24,27 @@
 	import ButtonControl from '../components/ButtonControl.svelte'
 	import TopPlayersBoard from '../components/TopPlayersBoard.svelte'
 	import { getSnakeSpeedDependingOnBrowser } from '../utils/getSnakeSpeed'
+	import type { Direction, HeadRotation, Square } from '../model/Types'
+	import {
+		INITIAL_SNAKE_BODY,
+		INITIAL_SNAKE_HEAD,
+		INITIAL_SPS,
+		SQUARES_MAX,
+	} from '../model/Constants'
 
 	// states //
 	let squares: Array<Square> = []
 	let snakeHead: Square
 	let snakeBody: Square[]
-	let food: Square
 	let gameOver = false
 	let direction: Direction = 'right'
 	let growing: boolean = false
-	let lastFoodPos: Square
 	let growPos: Square
 	let nextBodyPartPos: Square
 	let snakeBodyWithoutFirst: Square[]
 	let lastSnakeBodyPart: Square
 	let headRotation: HeadRotation
 	let gameOverKeydownCount = 0
-	let apple = '/assets/apple.svg'
-	let banana = '/assets/banana.svg'
-	let avocado = '/assets/avocado.svg'
-	let appleOrBanana = 0
 	let rotationQueue: Direction[] = []
 	let shouldUseSwipeControl: boolean = false
 	let coveredTiles = 0
@@ -51,17 +52,10 @@
 	let spsCalculationInterval: NodeJS.Timer
 	let snakeHeadMoveInterval: NodeJS.Timer
 
-	// constants //
-	const SQUARES_MAX = 14
-	const INITIAL_SNAKE_HEAD: Square = [4, 3]
-	const INITIAL_SNAKE_BODY: Square[] = [[4, 2]]
-	const INITIAL_SPS = 9.2
-
 	// initialization //
 	snakeHead = INITIAL_SNAKE_HEAD
 	snakeBody = INITIAL_SNAKE_BODY
-	nextBodyPartPos = snakeHead
-	food = [8, 6]
+	nextBodyPartPos = INITIAL_SNAKE_HEAD
 	squaresPerSecond = INITIAL_SPS
 
 	onMount(() => {
@@ -90,10 +84,10 @@
 	$: lastSnakeBodyPart = snakeBody[snakeBody.length - 1]
 
 	// eating
-	$: if (food[0] == snakeHead[0] && food[1] == snakeHead[1]) {
+	$: if ($food[0] == snakeHead[0] && $food[1] == snakeHead[1]) {
 		incrementCurrentScore()
-		growPos = food
-		resetFood()
+		growPos = $food
+		resetFood(snakeBody)
 		growing = true
 		postCurrentScore()
 	}
@@ -101,14 +95,6 @@
 	const grow = () => {
 		snakeBody = [...snakeBody, growPos]
 		growing = false
-	}
-
-	const resetFood = () => {
-		lastFoodPos = food
-		appleOrBanana = Math.floor(Math.random() * 3)
-		do {
-			food = [Math.floor(Math.random() * SQUARES_MAX), Math.floor(Math.random() * SQUARES_MAX)]
-		} while (snakeBody.some(elem => elem[0] === food[0] && elem[1] === food[1]))
 	}
 
 	const initGameBoard = () => {
@@ -274,15 +260,9 @@
 						<SnakeBody {growing} />
 					{:else if snakeHead[0] == square[0] && snakeHead[1] == square[1]}
 						<SnakeHead {headRotation} {growing} />
-					{:else if food[0] == square[0] && food[1] == square[1]}
+					{:else if $food[0] == square[0] && $food[1] == square[1]}
 						<GameBoardTile {square}>
-							{#if appleOrBanana === 0}
-								<img src={apple} alt="an apple" />
-							{:else if appleOrBanana === 1}
-								<img src={banana} alt="a banana" />
-							{:else}
-								<img src={avocado} alt="a banana" />
-							{/if}
+							<img src={fruitIcons[$appleOrBanana]} alt="fruit icon" />
 						</GameBoardTile>
 					{:else}
 						<GameBoardTile {square} />

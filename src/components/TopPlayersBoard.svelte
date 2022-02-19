@@ -3,11 +3,11 @@
 	import { username } from '../stores'
 	import ScoreBoardEntry from './ScoreBoardEntry.svelte'
 	import { onMount } from 'svelte'
-	const GET_SCORES_INTERVAL_IN_MS = +import.meta.env.VITE_GET_SCORES_INTERVAL_IN_MS
+	import { FETCH_SCORES_INTERVAL_IN_MS } from '../model/Constants'
 
 	onMount(async () => {
 		fetchTopPlayers()
-		setInterval(fetchTopPlayers, GET_SCORES_INTERVAL_IN_MS)
+		setInterval(fetchTopPlayers, FETCH_SCORES_INTERVAL_IN_MS)
 	})
 </script>
 

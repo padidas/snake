@@ -2,6 +2,6 @@
 	import { snakeLength } from '../stores/ScoreStore'
 </script>
 
-<div>
-	Snake Length: {$snakeLength}
+<div class="text-xs">
+	LENGTH: {$snakeLength}
 </div>

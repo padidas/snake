@@ -46,24 +46,44 @@
 	let appleOrBanana = 0
 	let rotationQueue: Direction[] = []
 	let shouldUseSwipeControl: boolean = false
+	let coveredTiles = 0
+	let squaresPerSecond: number
+	let spsCalculationInterval: NodeJS.Timer
 
 	// constants //
 	const SQUARES_MAX = 14
 	const INITIAL_SNAKE_HEAD: Square = [4, 3]
 	const INITIAL_SNAKE_BODY: Square[] = [[4, 2]]
+	const INITIAL_SPS = 9.2
 
 	// initialization //
 	snakeHead = INITIAL_SNAKE_HEAD
 	snakeBody = INITIAL_SNAKE_BODY
 	nextBodyPartPos = snakeHead
 	food = [8, 6]
+	squaresPerSecond = INITIAL_SPS
 
 	onMount(() => {
 		setInterval(moveSnakeHead, SNAKE_SPEED_DEPENDING_ON_BROWSER())
+		initSpsCalculationInterval()
 	})
 
+	const initSpsCalculationInterval = () =>
+		(spsCalculationInterval = setInterval(calculateSps, 5_000))
+
+	const calculateSps = () => {
+		squaresPerSecond = coveredTiles / 5
+		coveredTiles = 0
+	}
+
+	$: if (gameOver) {
+		squaresPerSecond = 0
+		coveredTiles = 0
+		clearInterval(spsCalculationInterval)
+	}
+
 	const SNAKE_SPEED_DEPENDING_ON_BROWSER = () =>
-		Bowser.getParser(window.navigator.userAgent).getEngineName() == 'Gecko' ? 94 : 100
+		Bowser.getParser(window.navigator.userAgent).getEngineName() == 'Gecko' ? 90 : 109
 
 	$: lastSnakeBodyPart = snakeBody[snakeBody.length - 1]
 
@@ -111,13 +131,16 @@
 	// allow snake to go through walls
 	$: {
 		if (snakeHead[0] >= SQUARES_MAX) snakeHead[0] = 0
-		if (snakeHead[0] < 0) snakeHead[0] = SQUARES_MAX - 1
-		if (snakeHead[1] >= SQUARES_MAX) snakeHead[1] = 0
-		if (snakeHead[1] < 0) snakeHead[1] = SQUARES_MAX - 1
+		else if (snakeHead[0] < 0) snakeHead[0] = SQUARES_MAX - 1
+		else if (snakeHead[1] >= SQUARES_MAX) snakeHead[1] = 0
+		else if (snakeHead[1] < 0) snakeHead[1] = SQUARES_MAX - 1
 	}
 
 	const moveSnakeHead = () => {
 		if (gameOver) return
+
+		coveredTiles = coveredTiles + 1
+
 		direction = rotationQueue[0] ?? direction
 		rotationQueue = rotationQueue.filter((elem, i) => i != 0)
 
@@ -161,6 +184,8 @@
 		resetCurrentScore()
 		resetCurrentScoreId()
 		growing = false
+		initSpsCalculationInterval()
+		squaresPerSecond = INITIAL_SPS
 	}
 
 	const toggleControlMode = () => (shouldUseSwipeControl = !shouldUseSwipeControl)
@@ -275,6 +300,7 @@
 				{/if}</button
 			>
 			<SnakeLengthInfo />
+			<div class="text-xs">{`[${squaresPerSecond} SPS]`}</div>
 			<RestartButton {restart} />
 		</div>
 	</SubContainer>

@@ -49,6 +49,7 @@
 	let coveredTiles = 0
 	let squaresPerSecond: number
 	let spsCalculationInterval: NodeJS.Timer
+	let snakeHeadMoveInterval: NodeJS.Timer
 
 	// constants //
 	const SQUARES_MAX = 14
@@ -64,9 +65,12 @@
 	squaresPerSecond = INITIAL_SPS
 
 	onMount(() => {
-		setInterval(moveSnakeHead, SNAKE_SPEED_DEPENDING_ON_BROWSER())
+		initSnakeHeadMoveInterval()
 		initSpsCalculationInterval()
 	})
+
+	const initSnakeHeadMoveInterval = () =>
+		(snakeHeadMoveInterval = setInterval(moveSnakeHead, SNAKE_SPEED_DEPENDING_ON_BROWSER()))
 
 	const initSpsCalculationInterval = () =>
 		(spsCalculationInterval = setInterval(calculateSps, 5_000))
@@ -79,6 +83,7 @@
 	$: if (gameOver) {
 		squaresPerSecond = 0
 		coveredTiles = 0
+		clearInterval(snakeHeadMoveInterval)
 		clearInterval(spsCalculationInterval)
 	}
 
@@ -137,8 +142,6 @@
 	}
 
 	const moveSnakeHead = () => {
-		if (gameOver) return
-
 		coveredTiles = coveredTiles + 1
 
 		direction = rotationQueue[0] ?? direction
@@ -184,6 +187,7 @@
 		resetCurrentScore()
 		resetCurrentScoreId()
 		growing = false
+		initSnakeHeadMoveInterval()
 		initSpsCalculationInterval()
 		squaresPerSecond = INITIAL_SPS
 	}

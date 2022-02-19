@@ -20,10 +20,10 @@
 	import GameOverText from '../components/GameOverText.svelte'
 	import SnakeLengthInfo from '../components/SnakeLengthInfo.svelte'
 	import ActivePlayers from '../components/ActivePlayers.svelte'
-	import Bowser from 'bowser'
 	import TouchControl from '../components/TouchControl.svelte'
 	import ButtonControl from '../components/ButtonControl.svelte'
 	import TopPlayersBoard from '../components/TopPlayersBoard.svelte'
+	import { getSnakeSpeedDependingOnBrowser } from '../utils/getSnakeSpeed'
 
 	// states //
 	let squares: Array<Square> = []
@@ -70,7 +70,7 @@
 	})
 
 	const initSnakeHeadMoveInterval = () =>
-		(snakeHeadMoveInterval = setInterval(moveSnakeHead, SNAKE_SPEED_DEPENDING_ON_BROWSER()))
+		(snakeHeadMoveInterval = setInterval(moveSnakeHead, getSnakeSpeedDependingOnBrowser()))
 
 	const initSpsCalculationInterval = () =>
 		(spsCalculationInterval = setInterval(calculateSps, 5_000))
@@ -86,10 +86,6 @@
 		clearInterval(snakeHeadMoveInterval)
 		clearInterval(spsCalculationInterval)
 	}
-
-	// Firefox 94 and Chrome 100 corresponds to 10 squares per second on both browsers
-	const SNAKE_SPEED_DEPENDING_ON_BROWSER = () =>
-		Bowser.getParser(window.navigator.userAgent).getEngineName() == 'Gecko' ? 94 : 100
 
 	$: lastSnakeBodyPart = snakeBody[snakeBody.length - 1]
 

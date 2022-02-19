@@ -87,8 +87,9 @@
 		clearInterval(spsCalculationInterval)
 	}
 
+	// Firefox 94 and Chrome 100 corresponds to 10 squares per second on both browsers
 	const SNAKE_SPEED_DEPENDING_ON_BROWSER = () =>
-		Bowser.getParser(window.navigator.userAgent).getEngineName() == 'Gecko' ? 100 : 109
+		Bowser.getParser(window.navigator.userAgent).getEngineName() == 'Gecko' ? 94 : 100
 
 	$: lastSnakeBodyPart = snakeBody[snakeBody.length - 1]
 

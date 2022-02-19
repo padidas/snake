@@ -88,7 +88,7 @@
 	}
 
 	const SNAKE_SPEED_DEPENDING_ON_BROWSER = () =>
-		Bowser.getParser(window.navigator.userAgent).getEngineName() == 'Gecko' ? 90 : 109
+		Bowser.getParser(window.navigator.userAgent).getEngineName() == 'Gecko' ? 100 : 109
 
 	$: lastSnakeBodyPart = snakeBody[snakeBody.length - 1]
 

@@ -7,6 +7,7 @@
 		snakeLength,
 	} from '../stores/ScoreStore'
 	import { fruitIcons, appleOrBanana, food, resetFood } from '../stores/FoodStore'
+
 	import GameBoardTile from '../components/GameBoardTile.svelte'
 	import RestartButton from '../components/RestartButton.svelte'
 	import ScoreSection from '../components/ScoreSection.svelte'
@@ -16,13 +17,14 @@
 	import SubContainer from '../components/Layout/SubContainer.svelte'
 	import GameContainer from '../components/Layout/GameContainer.svelte'
 	import GameBoard from '../components/GameBoard.svelte'
-	import { onMount } from 'svelte'
 	import GameOverText from '../components/GameOverText.svelte'
 	import SnakeLengthInfo from '../components/SnakeLengthInfo.svelte'
 	import ActivePlayers from '../components/ActivePlayers.svelte'
 	import TouchControl from '../components/TouchControl.svelte'
 	import ButtonControl from '../components/ButtonControl.svelte'
 	import TopPlayersBoard from '../components/TopPlayersBoard.svelte'
+
+	import { onMount } from 'svelte'
 	import { getSnakeSpeedDependingOnBrowser } from '../utils/getSnakeSpeed'
 	import type { Direction, HeadRotation, Square } from '../model/Types'
 	import {
@@ -33,7 +35,7 @@
 	} from '../model/Constants'
 
 	// states //
-	let squares: Array<Square> = []
+	let gameBoard: Array<Square> = []
 	let snakeHead: Square
 	let snakeBody: Square[]
 	let gameOver = false
@@ -100,7 +102,7 @@
 	const initGameBoard = () => {
 		for (let i = 0; i < SQUARES_MAX; i++) {
 			for (let j = 0; j < SQUARES_MAX; j++) {
-				squares.push([i, j])
+				gameBoard.push([i, j])
 			}
 		}
 	}
@@ -254,9 +256,9 @@
 			{#if gameOver}
 				<GameOverText />
 			{/if}
-			{#each squares as square}
+			{#each gameBoard as square}
 				<SquareContainer>
-					{#if snakeBody.some(box => box[0] == square[0] && box[1] == square[1])}
+					{#if snakeBody.some(snakeBodyPart => snakeBodyPart[0] == square[0] && snakeBodyPart[1] == square[1])}
 						<SnakeBody {growing} />
 					{:else if snakeHead[0] == square[0] && snakeHead[1] == square[1]}
 						<SnakeHead {headRotation} {growing} />

@@ -7,6 +7,7 @@
 		snakeLength,
 	} from '../stores/ScoreStore'
 	import { fruitIcons, appleOrBanana, food, resetFood } from '../stores/FoodStore'
+	import { username } from '../stores'
 
 	import GameBoardTile from '../components/GameBoardTile.svelte'
 	import RestartButton from '../components/RestartButton.svelte'
@@ -33,12 +34,14 @@
 		INITIAL_SPS,
 		SQUARES_MAX,
 	} from '../model/Constants'
+	import EnterNamePopover from '../components/EnterNamePopover.svelte'
 
 	// states //
 	let gameBoard: Array<Square> = []
 	let snakeHead: Square
 	let snakeBody: Square[]
 	let gameOver = false
+	let enterNamePopoverVisible = false
 	let direction: Direction = 'right'
 	let growing: boolean = false
 	let growPos: Square
@@ -126,7 +129,18 @@
 		else if (snakeHead[1] < 0) snakeHead[1] = SQUARES_MAX - 1
 	}
 
+	// show popover to enter username before starting
+	$: {
+		if (!$username) enterNamePopoverVisible = true
+	}
+
+	const closeEnterNamePopover = () => {
+		if ($username) enterNamePopoverVisible = false
+	}
+
 	const moveSnakeHead = () => {
+		if (!$username || enterNamePopoverVisible) return
+
 		coveredTiles = coveredTiles + 1
 
 		direction = rotationQueue[0] ?? direction
@@ -255,6 +269,9 @@
 		<GameBoard>
 			{#if gameOver}
 				<GameOverText />
+			{/if}
+			{#if enterNamePopoverVisible}
+				<EnterNamePopover onClickFunction={closeEnterNamePopover} />
 			{/if}
 			{#each gameBoard as square}
 				<SquareContainer>

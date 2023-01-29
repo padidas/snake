@@ -271,7 +271,7 @@
 				<GameOverText />
 			{/if}
 			{#if enterNamePopoverVisible}
-				<EnterNamePopover onClickFunction={closeEnterNamePopover} />
+				<EnterNamePopover onClickFunction={closeEnterNamePopover} username={$username} />
 			{/if}
 			{#each gameBoard as square}
 				<SquareContainer>

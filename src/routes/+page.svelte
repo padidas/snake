@@ -9,7 +9,7 @@
 	import { fruitIcons, appleOrBanana, food, resetFood } from '../stores/FoodStore'
 	import { username } from '../stores'
 
-	import GameBoardTile from '../components/GameBoardTile.svelte'
+	import GameBoardTile from 'src/components/GameBoardTile.svelte'
 	import RestartButton from '../components/RestartButton.svelte'
 	import ScoreSection from '../components/ScoreSection.svelte'
 	import SnakeBody from '../components/SnakeBody.svelte'

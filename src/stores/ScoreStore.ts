@@ -21,9 +21,10 @@ export const resetCurrentScoreId = (): void => currentScoreId.set(ObjectID().toH
 
 export const fetchTopScores = async (): Promise<void> => {
 	console.log('fetchTopScores')
-	const res = await axios.get(`${BACKEND_URL}/scores/topScores`)
+	const res = await fetch(`/scores/topScores`)
+	const data = await res.json()
 	topScores.set(
-		res.data.map(elem => ({
+		data.map(elem => ({
 			scoreId: elem.id,
 			username: elem.username,
 			score: elem.score,
@@ -34,9 +35,10 @@ export const fetchTopScores = async (): Promise<void> => {
 
 export const fetchTopPlayers = async (): Promise<void> => {
 	console.log('fetchTopPlayers')
-	const res = await axios.get(`${BACKEND_URL}/scores/topPlayers`)
+	const res = await fetch(`/scores/topPlayers`)
+	const data = await res.json()
 	topPlayers.set(
-		res.data.map(elem => ({
+		data.map(elem => ({
 			scoreId: elem.id,
 			username: elem.username,
 			score: elem.score,
@@ -47,9 +49,10 @@ export const fetchTopPlayers = async (): Promise<void> => {
 
 export const fetchActiveScores = async (): Promise<void> => {
 	console.log('fetchActiveScores')
-	const res = await axios.get(`${BACKEND_URL}/scores/activeScores`)
+	const res = await fetch(`scores/activeScores`)
+	const data = await res.json()
 	activeScores.set(
-		res.data.map(elem => ({
+		data.map(elem => ({
 			scoreId: elem.id,
 			username: elem.username,
 			score: elem.score,

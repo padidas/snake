@@ -1,6 +1,7 @@
 import type { score } from '@prisma/client'
 import { json } from '@sveltejs/kit'
 import { createOrUpdateScore, getActivePlayers } from 'src/lib/database'
+import type { RequestEvent } from './$types'
 
 // CONTROLLER - GET - active players
 export async function GET(): Promise<Response> {
@@ -10,7 +11,7 @@ export async function GET(): Promise<Response> {
 }
 
 // CONTROLLER - POST - new active Score
-export async function POST({ request }): Promise<Response> {
+export async function POST({ request }: RequestEvent): Promise<Response> {
 	const newScore = await request.json()
 
 	const username = newScore.username.trim() ? newScore.username.trim() : 'Anonymous'

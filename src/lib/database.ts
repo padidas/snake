@@ -9,7 +9,7 @@ export async function getTop10Players(): Promise<Score[]> {
 		by: ['normalizedUsername'],
 		where: {
 			score: {
-				gte: 23,
+				gte: 50,
 			},
 		},
 		_max: {

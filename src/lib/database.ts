@@ -42,3 +42,31 @@ export async function getTop10Players(): Promise<Score[]> {
 
 	return highestScores
 }
+
+export async function getActivePlayers(): Promise<Score[]> {
+	await prisma.$connect()
+
+	const timeNow = new Date()
+
+	const activePlayers = await prisma.score.findMany({
+		where: {
+			modifiedDate: {
+				gt: '' + timeNow.setSeconds(timeNow.getSeconds() - 10),
+			},
+			privateMode: false,
+		},
+		take: 8,
+		orderBy: {
+			modifiedDate: 'desc',
+		},
+	})
+
+	return activePlayers.map(
+		score =>
+			({
+				username: score.username,
+				score: score.score,
+				snakeLength: score.snakeLength,
+			} as Score),
+	)
+}

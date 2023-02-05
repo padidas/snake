@@ -46,18 +46,6 @@ export const fetchActiveScores = async (): Promise<void> => {
 	)
 }
 
-// export const postCurrentScore = async (): Promise<void> => {
-// 	console.log('SAVE NEW SCORE')
-
-// 	const combined =
-// 		'' +
-// 		Buffer.from('' + TIMESTAMP_FORMATTER_ISO).toString('base64') + // hshehashe -> xxyxxyxy
-// 		Buffer.from('' + get(currentScore)).toString('base64') // 4 -> zjjzjzzzj
-
-// 	const score = Buffer.from(combined).toString('base64') // xxyxxyxyzjjzjzzzj -> blbababslab
-
-// }
-
 export const postCurrentScore = async (): Promise<void> => {
 	console.log('SAVE NEW SCORE')
 

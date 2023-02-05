@@ -19,20 +19,6 @@ export const incrementCurrentScore = (): void => currentScore.update(cs => cs + 
 export const resetCurrentScore = (): void => currentScore.set(0)
 export const resetCurrentScoreId = (): void => currentScoreId.set(ObjectID().toHexString())
 
-export const fetchTopScores = async (): Promise<void> => {
-	console.log('fetchTopScores')
-	const res = await fetch(`/scores/topScores`)
-	const data = await res.json()
-	topScores.set(
-		data.map(elem => ({
-			scoreId: elem.id,
-			username: elem.username,
-			score: elem.score,
-			snakeLength: elem.snakeLength,
-		})),
-	)
-}
-
 export const fetchTopPlayers = async (): Promise<void> => {
 	console.log('fetchTopPlayers')
 	const res = await fetch(`/scores/topPlayers`)
@@ -80,5 +66,5 @@ export const postCurrentScore = async (): Promise<void> => {
 		privateMode: get(privateMode),
 	}
 	await axios.post(`${BACKEND_URL}/scores`, composedScore)
-	fetchTopScores()
+	fetchTopPlayers()
 }

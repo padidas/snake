@@ -3,12 +3,12 @@
 	import { privateMode } from '../stores'
 	import { onMount } from 'svelte'
 	import ScoreBoardEntry from './ScoreBoardEntry.svelte'
-	import { FETCH_SCORES_INTERVAL_IN_MS } from '../model/Constants'
+	import { FETCH_ACTIVE_SCORES_INTERVAL } from '../model/Constants'
 
 	onMount(async () => {
 		privateMode.set(JSON.parse(window.localStorage.storedPrivateMode ?? false))
 		privateMode.subscribe(pm => (window.localStorage.storedPrivateMode = pm))
-		setInterval(fetchActiveScores, FETCH_SCORES_INTERVAL_IN_MS)
+		setInterval(fetchActiveScores, FETCH_ACTIVE_SCORES_INTERVAL)
 	})
 </script>
 

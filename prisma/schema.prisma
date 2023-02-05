@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model score {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  class              String   @map("_class")
+  modifiedDate       DateTime @db.Date
+  normalizedUsername String
+  privateMode        Boolean?
+  score              Int
+  snakeLength        Int
+  username           String
+}

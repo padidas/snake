@@ -3,11 +3,11 @@
 	import { username } from '../stores'
 	import ScoreBoardEntry from './ScoreBoardEntry.svelte'
 	import { onMount } from 'svelte'
-	import { FETCH_SCORES_INTERVAL_IN_MS } from '../model/Constants'
+	import { FETCH_TOP_SCORES_INTERVAL } from '../model/Constants'
 
 	onMount(async () => {
 		fetchTopPlayers()
-		setInterval(fetchTopPlayers, FETCH_SCORES_INTERVAL_IN_MS)
+		setInterval(fetchTopPlayers, FETCH_TOP_SCORES_INTERVAL)
 	})
 </script>
 

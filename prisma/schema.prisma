@@ -10,7 +10,6 @@ datasource db {
 model score {
   id                 String   @id @default(auto()) @map("_id") @db.ObjectId
   class              String   @map("_class")
-  isActivityHidden   Boolean?
   modifiedDate       DateTime @db.Date
   normalizedUsername String
   privateMode        Boolean?

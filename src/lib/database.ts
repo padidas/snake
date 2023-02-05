@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, type score } from '@prisma/client'
 import type { Score } from 'src/model/Types'
 export const prisma = new PrismaClient()
 
@@ -46,12 +46,12 @@ export async function getTop10Players(): Promise<Score[]> {
 export async function getActivePlayers(): Promise<Score[]> {
 	await prisma.$connect()
 
-	const timeNow = new Date()
+	const time10SecondsAgo = subtract10SecondsFromDate(new Date())
 
 	const activePlayers = await prisma.score.findMany({
 		where: {
 			modifiedDate: {
-				gt: '' + timeNow.setSeconds(timeNow.getSeconds() - 10),
+				gte: time10SecondsAgo,
 			},
 			privateMode: false,
 		},
@@ -69,4 +69,35 @@ export async function getActivePlayers(): Promise<Score[]> {
 				snakeLength: score.snakeLength,
 			} as Score),
 	)
+}
+
+export async function createOrUpdateScore(score: score): Promise<score> {
+	await prisma.$connect()
+
+	return await prisma.score.upsert({
+		where: {
+			id: score.id,
+		},
+		update: {
+			score: score.score,
+			snakeLength: score.snakeLength,
+			privateMode: score.privateMode,
+			modifiedDate: score.modifiedDate,
+		},
+		create: {
+			id: score.id,
+			username: score.username,
+			normalizedUsername: score.normalizedUsername,
+			score: score.score,
+			snakeLength: score.snakeLength,
+			privateMode: score.privateMode,
+			modifiedDate: score.modifiedDate,
+			class: score.class,
+		},
+	})
+}
+
+function subtract10SecondsFromDate(timeNow: Date): Date {
+	timeNow.setSeconds(timeNow.getSeconds() - 10)
+	return timeNow
 }

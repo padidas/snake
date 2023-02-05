@@ -23,7 +23,7 @@ export async function getTop10Players(): Promise<Score[]> {
 		take: 10,
 	})
 
-	const results = await Promise.all(
+	const highestScores = await Promise.all(
 		highestScoresInfo.map(async scoreInfo => {
 			const highestIndividualScore = await prisma.score.findFirst({
 				where: {
@@ -40,5 +40,5 @@ export async function getTop10Players(): Promise<Score[]> {
 		}),
 	)
 
-	return results
+	return highestScores
 }

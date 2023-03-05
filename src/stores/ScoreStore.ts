@@ -13,11 +13,11 @@ export const currentScore = writable<number>(0)
 export const currentScoreId = writable<string>(ObjectID().toHexString())
 export const snakeLength = writable<number>(0)
 
-export const incrementCurrentScore = (): void => currentScore.update(cs => cs + 1)
-export const resetCurrentScore = (): void => currentScore.set(0)
-export const resetCurrentScoreId = (): void => currentScoreId.set(ObjectID().toHexString())
+export const incrementCurrentScore = () => currentScore.update(cs => cs + 1)
+export const resetCurrentScore = () => currentScore.set(0)
+export const resetCurrentScoreId = () => currentScoreId.set(ObjectID().toHexString())
 
-export const fetchTopPlayers = async (): Promise<void> => {
+export async function fetchTopPlayers() {
 	console.log('fetchTopPlayers')
 	const res = await fetch(`/scores/topPlayers`)
 	const data = await res.json()
@@ -31,7 +31,7 @@ export const fetchTopPlayers = async (): Promise<void> => {
 	)
 }
 
-export const fetchActiveScores = async (): Promise<void> => {
+export async function fetchActiveScores() {
 	console.log('fetchActiveScores')
 	const res = await fetch(`scores/activeScores`)
 	const data = await res.json()
@@ -46,7 +46,7 @@ export const fetchActiveScores = async (): Promise<void> => {
 	)
 }
 
-export const postCurrentScore = async (): Promise<void> => {
+export async function postCurrentScore() {
 	console.log('SAVE NEW SCORE')
 
 	const combined =

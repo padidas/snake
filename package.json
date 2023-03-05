@@ -39,6 +39,7 @@
 		"axios": "^0.25.0",
 		"bowser": "^2.11.0",
 		"bson-objectid": "^2.0.2",
-		"buffer": "^6.0.3"
+		"buffer": "^6.0.3",
+		"redis": "^4.6.5"
 	}
 }

@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit'
-import { getTop10Players } from 'src/lib/database'
+import { getTop10Players } from '$lib/database'
 
 // GET top 10 highest Scores
 export async function GET(): Promise<Response> {

@@ -6,7 +6,6 @@ const config = {
 	resolve: {
 		alias: {
 			'src/': new URL('./src/', import.meta.url).pathname,
-			'lib/': new URL('./src/lib/', import.meta.url).pathname,
 		},
 	},
 }

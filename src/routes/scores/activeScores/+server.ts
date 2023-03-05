@@ -1,6 +1,6 @@
 import type { score } from '@prisma/client'
 import { json } from '@sveltejs/kit'
-import { createOrUpdateScore, getActivePlayers } from 'src/lib/database'
+import { createOrUpdateScore, getActivePlayers } from '$lib/database'
 import type { RequestEvent } from './$types'
 const TIMESTAMP_FORMATTER_ISO = import.meta.env.VITE_TIMESTAMP_FORMATTER_ISO
 

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { fetchActiveScores, activeScores, currentScoreId } from '../stores/ScoreStore'
-	import { privateMode } from '../stores'
+	import { privateMode } from 'src/stores'
+	import { activeScores, fetchActiveScores, currentScoreId } from 'src/stores/ScoreStore'
 	import { onMount } from 'svelte'
 	import ScoreBoardEntry from './ScoreBoardEntry.svelte'
-	import { FETCH_ACTIVE_SCORES_INTERVAL } from '../model/Constants'
+	import { FETCH_ACTIVE_SCORES_INTERVAL } from 'src/model/Constants'
 
 	onMount(async () => {
 		privateMode.set(JSON.parse(window.localStorage.storedPrivateMode ?? false))
